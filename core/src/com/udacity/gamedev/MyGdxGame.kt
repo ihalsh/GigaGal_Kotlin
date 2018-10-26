@@ -2,75 +2,94 @@ package com.udacity.gamedev
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.FitViewport
 
 class MyGdxGame : ApplicationAdapter() {
 
     companion object {
-        private val UDACITY_ORANGE = Color(
-                228.0f / 225.0f,
-                127.0f / 225.0f,
-                57.0f / 225.0f,
-                1.0f
-        )
-        const val WORLD_SIZE = 100.0f
-        const val LOGO_SIZE = 0.5f * WORLD_SIZE
+        private const val WORLD_SIZE = 100f
+        private const val EDGE = 8
+        private const val TEST_SIZE_1 = 20f
+        private const val TEST_SIZE_2 = 40f
     }
 
-    private lateinit var viewport: ExtendViewport
+    private lateinit var batch: SpriteBatch
+    private lateinit var viewport: FitViewport
 
-    // Declare a SpriteBatch
-    private lateinit var spriteBatch: SpriteBatch
-
-    // Declare a Texture for the Udacity Logo
+    // Texture for the raw platform image
     private lateinit var img: Texture
 
+    // NinePatch
+    private lateinit var ninePatch: NinePatch
+
     override fun create() {
-        viewport = ExtendViewport(WORLD_SIZE, WORLD_SIZE)
+        batch = SpriteBatch()
+        viewport = FitViewport(WORLD_SIZE, WORLD_SIZE)
 
-        // Initialize the SpriteBatch
-        spriteBatch = SpriteBatch()
+        // Load the platform texture (Look for the file in android/assets)
+        img = Texture("platform.png")
 
-        // Load the Udacity logo Texture (look in android/assets)
-        img = Texture("udacity_logo_white.png")
-
-
-    }
-
-    override fun render() {
-        viewport.apply()
-        Gdx.gl.glClearColor(
-                UDACITY_ORANGE.r,
-                UDACITY_ORANGE.g,
-                UDACITY_ORANGE.b,
-                1f
-        )
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-
-        // Set the SpriteBatch's projection matrix
-        spriteBatch.projectionMatrix = viewport.camera.combined
-
-        // Begin the sprite spriteBatch
-        spriteBatch.begin()
-
-        // Centering the logo
-        spriteBatch.draw(
-                img,
-                viewport.worldWidth / 2 - LOGO_SIZE / 2,
-                viewport.worldHeight / 2 - LOGO_SIZE / 2,
-                LOGO_SIZE,
-                LOGO_SIZE
-        )
-
-        // End the sprite spriteBatch
-        spriteBatch.end()
+        // Initialize the NinePatch using the texture and the EDGE constant
+        ninePatch = NinePatch(img, EDGE, EDGE, EDGE, EDGE)
     }
 
     override fun resize(width: Int, height: Int) {
         viewport.update(width, height, true)
+    }
+
+    override fun render() {
+        viewport.apply()
+
+        Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
+        batch.projectionMatrix = viewport.camera.combined
+        batch.begin()
+
+        // Draw the platform texture at TEST_SIZE_1
+        batch.draw(
+                img,
+                WORLD_SIZE * 1 / 4 - TEST_SIZE_1 / 2,
+                WORLD_SIZE * 1 / 4 - TEST_SIZE_1 / 2,
+                TEST_SIZE_1,
+                TEST_SIZE_1
+        )
+
+        // Draw the platform texture at TEST_SIZE_2
+        batch.draw(
+                img,
+                WORLD_SIZE * 3 / 4 - TEST_SIZE_2 / 2,
+                WORLD_SIZE * 1 / 4 - TEST_SIZE_2 / 2,
+                TEST_SIZE_2,
+                TEST_SIZE_2
+        )
+
+        // Draw the nine patch at TEST_SIZE_1
+        ninePatch.draw(
+                batch,
+                WORLD_SIZE * 1 / 4 - TEST_SIZE_1 / 2,
+                WORLD_SIZE * 3 / 4 - TEST_SIZE_1 / 2,
+                TEST_SIZE_1,
+                TEST_SIZE_1
+        )
+
+        // Draw the nine patch at TEST_SIZE_2
+        ninePatch.draw(
+                batch,
+                WORLD_SIZE * 3 / 4 - TEST_SIZE_2 / 2,
+                WORLD_SIZE * 3 / 4 - TEST_SIZE_2 / 2,
+                TEST_SIZE_2,
+                TEST_SIZE_2
+        )
+        batch.end()
+    }
+
+    override fun dispose() {
+        batch.dispose()
+        img.dispose()
     }
 }
