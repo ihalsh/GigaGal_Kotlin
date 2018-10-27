@@ -2,162 +2,94 @@ package com.udacity.gamedev
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetDescriptor
+import com.badlogic.gdx.assets.AssetErrorListener
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Animation
-import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.Array
-import com.badlogic.gdx.utils.DelayedRemovalArray
-import com.badlogic.gdx.utils.TimeUtils
-import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.badlogic.gdx.utils.viewport.FitViewport
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 
-class MyGdxGame : ApplicationAdapter() {
+class MyGdxGame : ApplicationAdapter(), AssetErrorListener {
 
-private val EXPLOSION_SPAWN_RATE = 20f
-    private val EXPLOSION_FRAME_DURATION = 0.1f
-    private val WALK_LOOP_FRAME_DURATION = 0.1f
+    companion object {
+
+        val TAG = MyGdxGame::class.java.simpleName
+
+        private const val ATLAS = "images/gigagal.pack.atlas"
+        private const val STANDING_RIGHT = "standing-right"
+    }
+
+    // Add an AssetManager
+    private lateinit var assetManager: AssetManager
 
     private lateinit var batch: SpriteBatch
-    private lateinit var viewport: ExtendViewport
 
-    private var startTime: Long = 0
+    // AtlasRegion to hold the standing right sprite
+    private lateinit var standingRight: TextureAtlas.AtlasRegion
 
-    private lateinit var walkLoop: Animation<TextureRegion>
-    private lateinit var explosion: Animation<TextureRegion>
-    private lateinit var explosions: DelayedRemovalArray<OneShotAnimation>
 
     override fun create() {
         batch = SpriteBatch()
-        viewport = ExtendViewport(100f, 100f)
 
-        // Set startTime using TimeUtils.nanoTime()
-        startTime = TimeUtils.nanoTime()
+        // Initialize your AssetManager
+        assetManager = AssetManager()
 
-        val walkLoopTextures = Array<TextureRegion>()
+        // Set this as the AssetManager's error listener
+        assetManager.setErrorListener(this)
 
-        // Add walk-1-right.png to walkLoopTextures
-        walkLoopTextures.add(TextureRegion(Texture("walk-1-right.png")))
+        // Tell the AssetManager to load the TextureAtlas with name ATLAS
+        assetManager.load(ATLAS, TextureAtlas::class.java)
 
-        // Add walk-2-right.png to walkLoopTextures
-        walkLoopTextures.add(TextureRegion(Texture("walk-2-right.png")))
+        // Call finishLoading() on your AssetManager
+        assetManager.finishLoading()
 
-        // Add walk-3-right.png to walkLoopTextures
-        walkLoopTextures.add(TextureRegion(Texture("walk-3-right.png")))
+        // Get the TextureAtlas from the asset manager
+        val atlas = assetManager.get<TextureAtlas>(ATLAS)
 
-        // Initialize walkLoop with a new animation in LOOP_PINGPONG mode
-        // Use WALK_LOOP_FRAME_DURATION
-        walkLoop = Animation(
-                WALK_LOOP_FRAME_DURATION,
-                walkLoopTextures,
-                Animation.PlayMode.LOOP_PINGPONG
-        )
+        // Populate your AtlasRegion using findRegion() on your Atlas
+        standingRight = atlas.findRegion(STANDING_RIGHT)
 
-        val explosionTextures = Array<TextureRegion>()
-        explosionTextures.add(TextureRegion(Texture("explosion-large.png")))
-        explosionTextures.add(TextureRegion(Texture("explosion-medium.png")))
-        explosionTextures.add(TextureRegion(Texture("explosion-small.png")))
-        explosion = Animation(EXPLOSION_FRAME_DURATION, explosionTextures, Animation.PlayMode.NORMAL)
-        explosions = DelayedRemovalArray()
-
-    }
-
-    override fun resize(width: Int, height: Int) {
-        viewport.update(width, height, true)
     }
 
     override fun render() {
-        updateExplosions()
-        viewport.apply()
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-
-        batch.projectionMatrix = viewport.camera.combined
         batch.begin()
 
-        // Compute the elapsed time in seconds since startTime
-        val elapsedTime = MathUtils.nanoToSec.times(TimeUtils.nanoTime() - startTime)
 
-        // Use getKeyFrame() to get the right frame from the walk loop
-        val walkLoopTexture = walkLoop.getKeyFrame(elapsedTime)
-
-        drawRegionCentered(
-                batch,
-                walkLoopTexture,
-                viewport.worldWidth / 2,
-                viewport.worldHeight / 2
-        )
-
-        for (explosion in explosions) {
-            drawRegionCentered(
-                    batch,
-                    explosion.frame,
-                    explosion.position.x,
-                    explosion.position.y
-            )
-        }
+        // Draw the standing right AtlasRegion
+        // Hint, you need to use the somewhat horrific version of draw with signature:
+        // draw (Texture texture, float x, float y, float originX, float originY,
+        // float width, float height, float scaleX,
+        // float scaleY, float rotation, int srcX, int srcY,
+        // int srcWidth, int srcHeight, boolean flipX, boolean flipY)
+        batch.draw(
+                standingRight.texture,
+                0f,
+                0f,
+                0f,
+                0f,
+                standingRight.regionWidth.toFloat(),
+                standingRight.regionHeight.toFloat(),
+                1f,
+                1f,
+                0f,
+                standingRight.regionX,
+                standingRight.regionY,
+                standingRight.regionWidth,
+                standingRight.regionHeight,
+                false,
+                false)
 
         batch.end()
     }
 
-    private fun drawRegionCentered(batch: SpriteBatch, region: TextureRegion, x: Float, y: Float) {
-        batch.draw(
-                region.texture,
-                x - region.regionWidth / 2,
-                y - region.regionHeight / 2,
-                0f,
-                0f,
-                region.regionWidth.toFloat(),
-                region.regionHeight.toFloat(),
-                1f,
-                1f,
-                0f,
-                region.regionX,
-                region.regionY,
-                region.regionWidth,
-                region.regionHeight,
-                false,
-                false)
+    override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {
+        Gdx.app.error(TAG, "Couldn't load asset: " + asset.fileName, throwable)
     }
 
-    private fun updateExplosions() {
-
-        // Remove explosions that are done
-        explosions.begin()
-        for (i in 0 until explosions.size) {
-            if (explosions.get(i).isAnimationFinished) {
-                explosions.removeIndex(i)
-            }
-        }
-        explosions.end()
-
-        // Randomly spawn a new explosion
-        if (MathUtils.random() < Gdx.graphics.deltaTime * EXPLOSION_SPAWN_RATE) {
-            val position = Vector2(
-                    MathUtils.random(viewport.worldWidth),
-                    MathUtils.random(viewport.worldWidth)
-            )
-            explosions.add(OneShotAnimation(explosion, position, TimeUtils.nanoTime()))
-        }
-    }
-
-    inner class OneShotAnimation(
-            private val animation: Animation<TextureRegion>,
-            val position: Vector2,
-            private val startTimeNanos: Long) {
-
-        val frame: TextureRegion
-            get() = animation.getKeyFrame(elapsedTime())
-
-        val isAnimationFinished: Boolean
-            get() = animation.isAnimationFinished(elapsedTime())
-
-        private fun elapsedTime(): Float {
-            return MathUtils.nanoToSec * (TimeUtils.nanoTime() - startTimeNanos)
-        }
+    override fun dispose() {
+        batch.dispose()
+        assetManager.dispose()
     }
 }

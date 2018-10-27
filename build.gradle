@@ -1,3 +1,10 @@
+// Check out the changes we've made to build.gradle
+// Getting into a fight with Gradle isn't really part of the learning objectives for this course
+// so these TODOs are already complete.
+
+// Import com.badlogic.gdx.tools.texturepacker.TexturePacker
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+
 buildscript {
     ext.kotlinVersion = '1.2.71'
 
@@ -12,6 +19,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.5'
+        // Add buildscript dependency on gdx-tools
+        classpath "com.badlogicgames.gdx:gdx-tools:1.7.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
     }
@@ -43,7 +52,6 @@ allprojects {
 project(":desktop") {
     apply plugin: "kotlin"
 
-
     dependencies {
         implementation project(":core")
         implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -74,7 +82,6 @@ project(":ios") {
     apply plugin: "kotlin"
     apply plugin: "robovm"
 
-
     dependencies {
         implementation project(":core")
         implementation "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
@@ -88,11 +95,25 @@ project(":ios") {
 project(":core") {
     apply plugin: "kotlin"
 
-
     dependencies {
         implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
+
+    // Define packTextures task
+    task packTextures {
+        def inputDir = "$rootDir/core/rawAssets/sprites"
+        def outputDir = "$rootDir/android/assets/images"
+        inputs.dir inputDir
+        outputs.dir outputDir
+        doLast {
+            delete(outputDir)
+            TexturePacker.process(inputDir, outputDir, "gigagal.pack")
+        }
+    }
+
+    // Add task dependency between compileJava and packTextures
+    project.tasks.compileJava.dependsOn packTextures
 }
 
 tasks.eclipse.doLast {
