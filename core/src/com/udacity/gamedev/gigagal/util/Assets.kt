@@ -3,8 +3,11 @@ package com.udacity.gamedev.gigagal.util
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
+import com.udacity.gamedev.gigagal.util.Constants.WALK_LOOP_DURATION
 
 /**
  * This utility class holds onto all the assets used in GigaGal. It's a singleton, so all
@@ -40,13 +43,34 @@ object Assets : Disposable, AssetErrorListener {
         assetManager.dispose()
     }
 
-    class GigaGalAssets(atlas: TextureAtlas) {
-        // Use atlas.findRegion() to initialize AtlasRegions
-        val standingLeft = atlas.findRegion(Constants.STANDING_LEFT)
-        val standingRight = atlas.findRegion(Constants.STANDING_RIGHT)
-        val jumpingLeft= atlas.findRegion(Constants.JUMPING_LEFT)
-        val jumpingRight= atlas.findRegion(Constants.JUMPING_RIGHT)
-        val walk_2_left = atlas.findRegion(Constants.WALK_2_LEFT)
-        val walk_2_right = atlas.findRegion(Constants.WALK_2_RIGHT)
+    class GigaGalAssets(
+            atlas: TextureAtlas,
+            // Use atlas.findRegion() to initialize AtlasRegions
+            val standingLeft: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.STANDING_LEFT),
+            val standingRight: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.STANDING_RIGHT),
+            val jumpingLeft: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.JUMPING_LEFT),
+            val jumpingRight: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.JUMPING_RIGHT)) {
+
+        val prepareLeftAnimation = { atlas: TextureAtlas ->
+            val walkingLeftFrames = Array<TextureAtlas.AtlasRegion>()
+            walkingLeftFrames.add(atlas.findRegion(Constants.WALK_2_LEFT))
+            walkingLeftFrames.add(atlas.findRegion(Constants.WALK_1_LEFT))
+            walkingLeftFrames.add(atlas.findRegion(Constants.WALK_2_LEFT))
+            walkingLeftFrames.add(atlas.findRegion(Constants.WALK_3_LEFT))
+            Animation(WALK_LOOP_DURATION, walkingLeftFrames, Animation.PlayMode.LOOP)
+        }
+        val prepareRightAnimation = { atlas: TextureAtlas ->
+            val walkingRightFrames = Array<TextureAtlas.AtlasRegion>()
+            walkingRightFrames.add(atlas.findRegion(Constants.WALK_2_RIGHT))
+            walkingRightFrames.add(atlas.findRegion(Constants.WALK_1_RIGHT))
+            walkingRightFrames.add(atlas.findRegion(Constants.WALK_2_RIGHT))
+            walkingRightFrames.add(atlas.findRegion(Constants.WALK_3_RIGHT))
+            Animation(WALK_LOOP_DURATION, walkingRightFrames, Animation.PlayMode.LOOP)
+        }
+
+        val walkingLeftAnimation = prepareLeftAnimation(atlas)
+        val walkingRightAnimation = prepareRightAnimation(atlas)
     }
 }
+
+

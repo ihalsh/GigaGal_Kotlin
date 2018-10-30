@@ -3,6 +3,7 @@ package com.udacity.gamedev.gigagal.entities
 import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.TimeUtils
@@ -24,6 +25,7 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
               private var facing: Constants.Facing = RIGHT,
               private var jumpState: Constants.JumpState = FALLING,
               private var jumpStartTime: Long = 0,
+              private var walkStartTime: Long = 0,
               private var walkState: Constants.WalkState = STANDING) {
 
     fun update(delta: Float) {
@@ -76,6 +78,9 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
     }
 
     private fun moveLeft(delta: Float) {
+        // If we're GROUNDED and not WALKING, save the walkStartTime
+        if (jumpState == GROUNDED && walkState != WALKING) walkStartTime = TimeUtils.nanoTime()
+
         //Set walkState to WALKING
         walkState = WALKING
 
@@ -87,6 +92,9 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
     }
 
     private fun moveRight(delta: Float) {
+        // If we're GROUNDED and not WALKING, save the walkStartTime
+        if (jumpState == GROUNDED && walkState != WALKING) walkStartTime = TimeUtils.nanoTime()
+
         //Set walkState to WALKING
         walkState = WALKING
 
@@ -129,17 +137,29 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
     fun render(batch: SpriteBatch) {
 
         // Select the correct sprite based on facing, jumpState, and walkState
-        val region = if (jumpState == GROUNDED) {
+        val region: TextureAtlas.AtlasRegion = if (jumpState == GROUNDED) {
             if (walkState == WALKING) {
                 when (facing) {
-                    LEFT -> gigaGalAssets.walk_2_left
-                    RIGHT -> gigaGalAssets.walk_2_right
+                    LEFT -> {
+                        // Calculate how long we've been walking in seconds
+                        val walkTimeSeconds = MathUtils.nanoToSec *
+                                (TimeUtils.nanoTime() - walkStartTime)
+                        // Select the correct frame from the walking right animation
+                        gigaGalAssets.walkingLeftAnimation.getKeyFrame(walkTimeSeconds)
+                    }
+                    RIGHT -> {
+                        // Calculate how long we've been walking in seconds
+                        val walkTimeSeconds = MathUtils.nanoToSec *
+                                (TimeUtils.nanoTime() - walkStartTime)
+                        // Select the correct frame from the walking right animation
+                        gigaGalAssets.walkingRightAnimation.getKeyFrame(walkTimeSeconds)
+                    }
                 }
-            } else when (facing) {
+            } else when (facing) /*walkState == STANDING*/ {
                 LEFT -> gigaGalAssets.standingLeft
                 RIGHT -> gigaGalAssets.standingRight
             }
-        } else when (facing) {
+        } else when (facing) /*jumpState != GROUNDED*/{
             LEFT -> gigaGalAssets.jumpingLeft
             RIGHT -> gigaGalAssets.jumpingRight
         }
