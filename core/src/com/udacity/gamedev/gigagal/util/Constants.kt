@@ -26,9 +26,10 @@ object Constants {
     const val STANDING_RIGHT = "standing-right"
     const val JUMPING_LEFT = "jumping-left"
     const val JUMPING_RIGHT = "jumping-right"
+    const val WALK_2_LEFT = "walk-2-left"
+    const val WALK_2_RIGHT = "walk-2-right"
 
     // Vector2 Constant for GigaGal's eye position within her sprites (16, 24)
-
     val GIGAGAL_EYE_POSITION = Vector2(16f, 24f)
 
     // Float constant for the height of GigaGal's eye above her feet (16)
@@ -50,14 +51,15 @@ object Constants {
     // Something like 1000 works well.
     const val GRAVITY = 1000
 
-    // Create an enum called Facing, with LEFT and RIGHT members
     enum class Facing {
         LEFT, RIGHT
     }
 
-    // Add a JumpState enum containing JUMPING, FALLING, and GROUNDED
     enum class JumpState {
         JUMPING, FALLING, GROUNDED
+    }
+    enum class WalkState {
+        STANDING, WALKING
     }
 }
 

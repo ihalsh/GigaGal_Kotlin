@@ -46,5 +46,7 @@ object Assets : Disposable, AssetErrorListener {
         val standingRight = atlas.findRegion(Constants.STANDING_RIGHT)
         val jumpingLeft= atlas.findRegion(Constants.JUMPING_LEFT)
         val jumpingRight= atlas.findRegion(Constants.JUMPING_RIGHT)
+        val walk_2_left = atlas.findRegion(Constants.WALK_2_LEFT)
+        val walk_2_right = atlas.findRegion(Constants.WALK_2_RIGHT)
     }
 }

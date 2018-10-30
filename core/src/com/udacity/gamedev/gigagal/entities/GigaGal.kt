@@ -16,12 +16,15 @@ import com.udacity.gamedev.gigagal.util.Constants.JUMP_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.JumpState.*
 import com.udacity.gamedev.gigagal.util.Constants.MAX_JUMP_DURATION
 import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
+import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
+import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
 
 class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
               private val velocity: Vector2 = Vector2(),
               private var facing: Constants.Facing = RIGHT,
               private var jumpState: Constants.JumpState = FALLING,
-              private var jumpStartTime: Long = 0) {
+              private var jumpStartTime: Long = 0,
+              private var walkState: Constants.WalkState = STANDING) {
 
     fun update(delta: Float) {
 
@@ -66,14 +69,16 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
         if (input.isKeyPressed(Keys.LEFT)) {
             logger { "LEFT pressed" }
             moveLeft(delta)
-        }
-        if (input.isKeyPressed(Keys.RIGHT)) {
+        } else if (input.isKeyPressed(Keys.RIGHT)) {
             logger { "RIGHT pressed" }
             moveRight(delta)
-        }
+        } else walkState = STANDING
     }
 
     private fun moveLeft(delta: Float) {
+        //Set walkState to WALKING
+        walkState = WALKING
+
         // Update facing direction
         facing = LEFT
 
@@ -82,6 +87,9 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
     }
 
     private fun moveRight(delta: Float) {
+        //Set walkState to WALKING
+        walkState = WALKING
+
         // Update facing direction
         facing = RIGHT
 
@@ -120,10 +128,17 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
 
     fun render(batch: SpriteBatch) {
 
-        // Select the correct region based on facing and jumpState
-        val region = if (jumpState == GROUNDED) when (facing) {
-            LEFT -> gigaGalAssets.standingLeft
-            RIGHT -> gigaGalAssets.standingRight
+        // Select the correct sprite based on facing, jumpState, and walkState
+        val region = if (jumpState == GROUNDED) {
+            if (walkState == WALKING) {
+                when (facing) {
+                    LEFT -> gigaGalAssets.walk_2_left
+                    RIGHT -> gigaGalAssets.walk_2_right
+                }
+            } else when (facing) {
+                LEFT -> gigaGalAssets.standingLeft
+                RIGHT -> gigaGalAssets.standingRight
+            }
         } else when (facing) {
             LEFT -> gigaGalAssets.jumpingLeft
             RIGHT -> gigaGalAssets.jumpingRight
