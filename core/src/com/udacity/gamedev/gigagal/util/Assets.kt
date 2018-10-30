@@ -44,5 +44,7 @@ object Assets : Disposable, AssetErrorListener {
         // Use atlas.findRegion() to initialize AtlasRegions
         val standingLeft = atlas.findRegion(Constants.STANDING_LEFT)
         val standingRight = atlas.findRegion(Constants.STANDING_RIGHT)
+        val jumpingLeft= atlas.findRegion(Constants.JUMPING_LEFT)
+        val jumpingRight= atlas.findRegion(Constants.JUMPING_RIGHT)
     }
 }

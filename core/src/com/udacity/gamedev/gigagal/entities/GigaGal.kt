@@ -1,13 +1,15 @@
 package com.udacity.gamedev.gigagal.entities
 
 import com.badlogic.gdx.Gdx.input
-import com.badlogic.gdx.Input.Keys.*
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.TimeUtils
 import com.udacity.gamedev.gigagal.util.Assets.gigaGalAssets
 import com.udacity.gamedev.gigagal.util.Constants
+import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
+import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_POSITION
 import com.udacity.gamedev.gigagal.util.Constants.JUMP_SPEED
@@ -17,7 +19,7 @@ import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
 
 class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
               private val velocity: Vector2 = Vector2(),
-              private var facing: Constants.Facing = Constants.Facing.RIGHT,
+              private var facing: Constants.Facing = RIGHT,
               private var jumpState: Constants.JumpState = FALLING,
               private var jumpStartTime: Long = 0) {
 
@@ -45,7 +47,7 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
             }
         }
 
-        if (input.isKeyPressed(Z)) {
+        if (input.isKeyPressed(Keys.Z)) {
             logger { "Z pressed" }
             // Handle jump key
             when (jumpState) {
@@ -61,11 +63,11 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
         }
 
         // Uses Gdx.input.isKeyPressed() to check if the left arrow key is pressed
-        if (input.isKeyPressed(LEFT)) {
+        if (input.isKeyPressed(Keys.LEFT)) {
             logger { "LEFT pressed" }
             moveLeft(delta)
         }
-        if (input.isKeyPressed(RIGHT)) {
+        if (input.isKeyPressed(Keys.RIGHT)) {
             logger { "RIGHT pressed" }
             moveRight(delta)
         }
@@ -73,7 +75,7 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
 
     private fun moveLeft(delta: Float) {
         // Update facing direction
-        facing = Constants.Facing.LEFT
+        facing = LEFT
 
         // Move GigaGal left by delta * movement speed
         position.mulAdd(MOVEMENT_SPEED, -delta)
@@ -81,7 +83,7 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
 
     private fun moveRight(delta: Float) {
         // Update facing direction
-        facing = Constants.Facing.RIGHT
+        facing = RIGHT
 
         // Same for moving GigaGal right
         position.mulAdd(MOVEMENT_SPEED, delta)
@@ -118,10 +120,13 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
 
     fun render(batch: SpriteBatch) {
 
-        // Set region to the correct sprite for the current facing direction
-        val region = when (facing) {
-            Constants.Facing.LEFT -> gigaGalAssets.standingLeft
-            Constants.Facing.RIGHT -> gigaGalAssets.standingRight
+        // Select the correct region based on facing and jumpState
+        val region = if (jumpState == GROUNDED) when (facing) {
+            LEFT -> gigaGalAssets.standingLeft
+            RIGHT -> gigaGalAssets.standingRight
+        } else when (facing) {
+            LEFT -> gigaGalAssets.jumpingLeft
+            RIGHT -> gigaGalAssets.jumpingRight
         }
 
         batch.draw(

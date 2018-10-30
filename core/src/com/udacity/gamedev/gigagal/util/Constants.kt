@@ -24,6 +24,8 @@ object Constants {
     // A constants for the names of sprites
     const val STANDING_LEFT = "standing-left"
     const val STANDING_RIGHT = "standing-right"
+    const val JUMPING_LEFT = "jumping-left"
+    const val JUMPING_RIGHT = "jumping-right"
 
     // Vector2 Constant for GigaGal's eye position within her sprites (16, 24)
 
