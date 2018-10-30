@@ -3,16 +3,17 @@ package com.udacity.gamedev.gigagal.entities
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.udacity.gamedev.gigagal.util.Assets
-import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_POSITION
 
 class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
-              private val velocity: Vector2 = Vector2()) {
+              private val velocity: Vector2 = Vector2(0f, 0f)) {
 
     fun update(delta: Float) {
 
         position.mulAdd(velocity, delta)
+
+//        logger{"Position: $position"}
 
     }
 
@@ -39,10 +40,9 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
                 region.regionHeight,
                 false,
                 false)
-
     }
 
     companion object {
-        val TAG = GigaGal::class.java.name
+        val logger = ktx.log.logger<GigaGal>()
     }
 }

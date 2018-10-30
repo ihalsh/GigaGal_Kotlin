@@ -38,6 +38,7 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
+        KTXVersion = '1.9.8-b5'
     }
 
     repositories {
@@ -57,6 +58,10 @@ project(":desktop") {
         implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        implementation "io.github.libktx:ktx-app:$KTXVersion"
+        implementation "io.github.libktx:ktx-graphics:$KTXVersion"
+        implementation "io.github.libktx:ktx-assets:$KTXVersion"
+        implementation "io.github.libktx:ktx-log:$KTXVersion"
     }
 }
 
@@ -75,6 +80,10 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        implementation "io.github.libktx:ktx-app:$KTXVersion"
+        implementation "io.github.libktx:ktx-graphics:$KTXVersion"
+        implementation "io.github.libktx:ktx-assets:$KTXVersion"
+        implementation "io.github.libktx:ktx-log:$KTXVersion"
     }
 }
 
@@ -89,6 +98,10 @@ project(":ios") {
         implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        implementation "io.github.libktx:ktx-app:$KTXVersion"
+        implementation "io.github.libktx:ktx-graphics:$KTXVersion"
+        implementation "io.github.libktx:ktx-assets:$KTXVersion"
+        implementation "io.github.libktx:ktx-log:$KTXVersion"
     }
 }
 
@@ -98,6 +111,10 @@ project(":core") {
     dependencies {
         implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        implementation "io.github.libktx:ktx-app:$KTXVersion"
+        implementation "io.github.libktx:ktx-graphics:$KTXVersion"
+        implementation "io.github.libktx:ktx-assets:$KTXVersion"
+        implementation "io.github.libktx:ktx-log:$KTXVersion"
     }
 
     // Define packTextures task

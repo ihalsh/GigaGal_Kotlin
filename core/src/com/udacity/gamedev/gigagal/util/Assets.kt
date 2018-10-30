@@ -1,6 +1,5 @@
 package com.udacity.gamedev.gigagal.util
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
@@ -18,7 +17,7 @@ import com.badlogic.gdx.utils.Disposable
 
 object Assets : Disposable, AssetErrorListener {
 
-    private val TAG = Assets::class.java.simpleName
+    private val logger = ktx.log.logger<Assets>()
     private val assetManager by lazy { AssetManager() }
     lateinit var gigaGalAssets: GigaGalAssets
 
@@ -29,10 +28,12 @@ object Assets : Disposable, AssetErrorListener {
             finishLoading()
             gigaGalAssets = GigaGalAssets(get<TextureAtlas>(Constants.TEXTURE_ATLAS))
         }
+        logger { "Assets loading... Ok" }
     }
 
     override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {
-        Gdx.app.error(TAG, "Couldn't load asset: " + asset.fileName, throwable)
+//        Gdx.app.error(TAG, "Couldn't load asset: " + asset.fileName, throwable)
+        logger.error(throwable) { "Couldn't load asset: ${asset.fileName}" }
     }
 
     override fun dispose() {
