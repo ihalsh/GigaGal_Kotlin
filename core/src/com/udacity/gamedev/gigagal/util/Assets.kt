@@ -41,7 +41,8 @@ object Assets : Disposable, AssetErrorListener {
     }
 
     class GigaGalAssets(atlas: TextureAtlas) {
-        // Use atlas.findRegion() to initialize the standing right AtlasRegion
+        // Use atlas.findRegion() to initialize AtlasRegions
+        val standingLeft = atlas.findRegion(Constants.STANDING_LEFT)
         val standingRight = atlas.findRegion(Constants.STANDING_RIGHT)
     }
 }
