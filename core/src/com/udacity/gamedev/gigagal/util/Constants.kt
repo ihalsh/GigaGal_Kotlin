@@ -28,4 +28,7 @@ object Constants {
 
     // Float constant for the height of GigaGal's eye above her feet (16)
     const val GIGAGAL_EYE_HEIGHT = 16f
+
+    // Constant for GigaGal's movement speed
+    val MOVEMENT_SPEED = Vector2(30f, 0f)
 }

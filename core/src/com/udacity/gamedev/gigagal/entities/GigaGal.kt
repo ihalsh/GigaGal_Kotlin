@@ -1,20 +1,39 @@
 package com.udacity.gamedev.gigagal.entities
 
+import com.badlogic.gdx.Gdx.input
+import com.badlogic.gdx.Input.Keys.RIGHT
+import com.badlogic.gdx.Input.Keys.LEFT
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_POSITION
+import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
 
 class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
-              private val velocity: Vector2 = Vector2(0f, 0f)) {
+              private val velocity: Vector2 = Vector2(MOVEMENT_SPEED)) {
 
     fun update(delta: Float) {
 
+        // Uses Gdx.input.isKeyPressed() to check if the left arrow key is pressed
+        if (input.isKeyPressed(LEFT)) {
+            logger{"LEFT pressed"}
+            moveLeft(delta)
+        }
+        if (input.isKeyPressed(RIGHT)) {
+            logger{"RIGHT pressed"}
+            moveRight(delta)
+        }
+    }
+
+    private fun moveLeft(delta: Float) {
+        // Move GigaGal left by delta * movement speed
+        position.mulAdd(velocity, -delta)
+    }
+
+    private fun moveRight(delta: Float) {
+        // Same for moving GigaGal right
         position.mulAdd(velocity, delta)
-
-//        logger{"Position: $position"}
-
     }
 
     fun render(batch: SpriteBatch) {
