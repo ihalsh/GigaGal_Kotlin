@@ -1,6 +1,7 @@
 package com.udacity.gamedev.gigagal.util
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector2
 
 object Constants {
 
@@ -20,4 +21,11 @@ object Constants {
 
     // A constant for the name of the standing-right sprite
     const val STANDING_RIGHT = "standing-right"
+
+    // Vector2 Constant for GigaGal's eye position within her sprites (16, 24)
+
+    val GIGAGAL_EYE_POSITION = Vector2(16f, 24f)
+
+    // Float constant for the height of GigaGal's eye above her feet (16)
+    const val GIGAGAL_EYE_HEIGHT = 16f
 }

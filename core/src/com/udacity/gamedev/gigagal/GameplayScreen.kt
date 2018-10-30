@@ -5,13 +5,15 @@ import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.udacity.gamedev.gigagal.entities.GigaGal
 import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.Constants.BACKGROUND_COLOR
 import com.udacity.gamedev.gigagal.util.Constants.WORLD_SIZE
 
 class GameplayScreen (
         private val spriteBatch: SpriteBatch = SpriteBatch(),
-        private val viewport: ExtendViewport = ExtendViewport(WORLD_SIZE, WORLD_SIZE)
+        private val viewport: ExtendViewport = ExtendViewport(WORLD_SIZE, WORLD_SIZE),
+        private val level:Level = Level()
         ) : ScreenAdapter() {
 
     override fun show() {
@@ -20,6 +22,8 @@ class GameplayScreen (
     }
 
     override fun render(delta: Float) {
+        // Call update() on the Level
+        level.update(delta)
 
         // Apply the viewport
         viewport.apply()
@@ -38,26 +42,7 @@ class GameplayScreen (
         // Begin the SpriteBatch
         spriteBatch.begin()
 
-        // Draw the standing right AtlasRegion
-        val region = Assets.gigaGalAssets.standingRight
-
-        spriteBatch.draw(
-                region.texture,
-                50f,
-                50f,
-                0f,
-                0f,
-                region.regionWidth.toFloat(),
-                region.regionHeight.toFloat(),
-                1f,
-                1f,
-                0f,
-                region.regionX,
-                region.regionY,
-                region.regionWidth,
-                region.regionHeight,
-                false,
-                false)
+        level.render(spriteBatch)
 
         // End the SpriteBatch
         spriteBatch.end()
