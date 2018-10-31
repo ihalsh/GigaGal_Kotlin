@@ -12,14 +12,9 @@ import ktx.log.logger
 
 class GameplayScreen(
         private val spriteBatch: SpriteBatch = SpriteBatch(),
-        private val renderer: ShapeRenderer = ShapeRenderer(),
         private val viewport: ExtendViewport = ExtendViewport(WORLD_SIZE, WORLD_SIZE),
         private val level: Level = Level()
 ) : KtxScreen {
-
-    init {
-        renderer.setAutoShapeType(true)
-    }
 
     override fun render(delta: Float) {
 
@@ -32,11 +27,10 @@ class GameplayScreen(
         // Clear the screen to the BACKGROUND_COLOR
         clearScreen(BACKGROUND_COLOR.r, BACKGROUND_COLOR.g, BACKGROUND_COLOR.b)
 
-        // Set the SpriteBatch's and Shaperenderer's projection matrix
+        // Set the SpriteBatch's projection matrix
         spriteBatch.projectionMatrix = viewport.camera.combined
-        renderer.projectionMatrix = viewport.camera.combined
 
-        level.render(spriteBatch, renderer)
+        level.render(spriteBatch)
     }
 
     override fun resize(width: Int, height: Int) {

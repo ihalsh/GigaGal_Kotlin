@@ -1,7 +1,7 @@
 package com.udacity.gamedev.gigagal.entities
 
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.udacity.gamedev.gigagal.util.Assets.platformAssets
 
 class Platform(
         private val left: Float = 0f,
@@ -11,11 +11,16 @@ class Platform(
         private val bottom: Float = top - height,
         private val right: Float = left + width) {
 
-    fun render(renderer: ShapeRenderer) {
+    fun render(batch: SpriteBatch) {
 
-        // Draw a box representing the platform
-        renderer.color = Color.BLUE
-        renderer.rect(left, bottom, width, height)
+        // Draw the platform using the NinePatch
+        platformAssets.platformNinePatch.draw(
+                batch,
+                left - 1,
+                bottom - 1,
+                width + 2,
+                height + 2
+        )
     }
 }
 

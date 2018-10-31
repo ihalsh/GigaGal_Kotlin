@@ -20,12 +20,11 @@ class Level(private val gigaGal: GigaGal = GigaGal(),
         gigaGal.update(delta)
     }
 
-    fun render(batch: SpriteBatch, renderer: ShapeRenderer) {
+    fun render(batch: SpriteBatch) {
 
         // Render all platforms in the platform array
-        renderer.begin(ShapeRenderer.ShapeType.Filled)
-        for (platform in platforms) platform.render(renderer)
-        renderer.end()
+        for (platform in platforms)
+            batch.use { platform.render(it) }
 
         // KTX way of using SpriteBatch
         batch.use { gigaGal.render(it) }

@@ -4,9 +4,11 @@ import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
+import com.udacity.gamedev.gigagal.util.Constants.PLATFORM_EDGE
 import com.udacity.gamedev.gigagal.util.Constants.WALK_LOOP_DURATION
 
 /**
@@ -23,13 +25,16 @@ object Assets : Disposable, AssetErrorListener {
     private val logger = ktx.log.logger<Assets>()
     private val assetManager by lazy { AssetManager() }
     lateinit var gigaGalAssets: GigaGalAssets
+    lateinit var platformAssets: PlatformAssets
 
     init {
         with(assetManager) {
             setErrorListener(Assets)
             load(Constants.TEXTURE_ATLAS, TextureAtlas::class.java)
             finishLoading()
-            gigaGalAssets = GigaGalAssets(get<TextureAtlas>(Constants.TEXTURE_ATLAS))
+            val atlas = get<TextureAtlas>(Constants.TEXTURE_ATLAS)
+            gigaGalAssets = GigaGalAssets(atlas)
+            platformAssets = PlatformAssets(atlas)
         }
         logger { "Assets loading... Ok" }
     }
@@ -71,6 +76,14 @@ object Assets : Disposable, AssetErrorListener {
         val walkingLeftAnimation = prepareLeftAnimation(atlas)
         val walkingRightAnimation = prepareRightAnimation(atlas)
     }
+
+    class PlatformAssets(atlas: TextureAtlas,
+                          val platformNinePatch: NinePatch
+                          = NinePatch(atlas.findRegion(Constants.PLATFORM_SPRITE),
+                                  PLATFORM_EDGE,
+                                  PLATFORM_EDGE,
+                                  PLATFORM_EDGE,
+                                  PLATFORM_EDGE))
 }
 
 
