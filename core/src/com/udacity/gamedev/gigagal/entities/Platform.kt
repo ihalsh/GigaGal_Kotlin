@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.udacity.gamedev.gigagal.util.Assets.platformAssets
 
 class Platform(
-        private val left: Float = 0f,
-        private val top: Float = 0f,
-        private val width: Float = 0f,
-        private val height: Float = 0f,
-        private val bottom: Float = top - height,
-        private val right: Float = left + width) {
+        val left: Float = 0f,
+        val top: Float = 0f,
+        val width: Float = 0f,
+        val height: Float = 0f,
+        val bottom: Float = top - height,
+        val right: Float = left + width) {
 
     fun render(batch: SpriteBatch) {
 

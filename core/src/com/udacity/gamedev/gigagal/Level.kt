@@ -17,7 +17,7 @@ class Level(private val gigaGal: GigaGal = GigaGal(),
 
     fun update(delta: Float) {
         // Update GigaGal
-        gigaGal.update(delta)
+        gigaGal.update(delta, platforms)
     }
 
     fun render(batch: SpriteBatch) {

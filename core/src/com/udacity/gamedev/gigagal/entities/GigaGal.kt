@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.TimeUtils
+import com.badlogic.gdx.utils.reflect.ArrayReflection.set
 import com.udacity.gamedev.gigagal.util.Assets.gigaGalAssets
 import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
@@ -17,10 +19,13 @@ import com.udacity.gamedev.gigagal.util.Constants.JUMP_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.JumpState.*
 import com.udacity.gamedev.gigagal.util.Constants.MAX_JUMP_DURATION
 import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
+import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
+import ktx.log.info
 
 class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
+              private val lastFramePosition: Vector2 = Vector2(position),
               private val velocity: Vector2 = Vector2(),
               private var facing: Constants.Facing = RIGHT,
               private var jumpState: Constants.JumpState = FALLING,
@@ -28,7 +33,9 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
               private var walkStartTime: Long = 0,
               private var walkState: Constants.WalkState = STANDING) {
 
-    fun update(delta: Float) {
+    fun update(delta: Float, platforms: Array<Platform>) {
+        // Update lastFramePosition
+        lastFramePosition.set(position)
 
         // Accelerate GigaGal down
         velocity.y -= delta * Constants.GRAVITY
@@ -50,10 +57,16 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
                 position.y = GIGAGAL_EYE_HEIGHT
                 velocity.y = 0f
             }
+
+            // For each platform, call landedOnPlatform()
+            for (platform in platforms) if (landedOnPlatform(platform)) {
+                jumpState = GROUNDED
+                position.y = platform.top + GIGAGAL_EYE_HEIGHT
+                velocity.y = 0f
+            }
         }
 
-        if (input.isKeyPressed(Keys.Z)) {
-            logger { "Z pressed" }
+        if (input.isKeyPressed(Keys.SPACE)) {
             // Handle jump key
             when (jumpState) {
                 GROUNDED -> startJump()
@@ -69,12 +82,36 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
 
         // Uses Gdx.input.isKeyPressed() to check if the left arrow key is pressed
         if (input.isKeyPressed(Keys.LEFT)) {
-            logger { "LEFT pressed" }
             moveLeft(delta)
         } else if (input.isKeyPressed(Keys.RIGHT)) {
-            logger { "RIGHT pressed" }
             moveRight(delta)
         } else walkState = STANDING
+    }
+
+    private fun landedOnPlatform(platform: Platform): Boolean {
+
+        // First check if GigaGal's feet were above the platform top last frame and below
+        // the platform top this frame
+
+        if (lastFramePosition.y - Constants.GIGAGAL_EYE_HEIGHT >= platform.top &&
+                position.y - Constants.GIGAGAL_EYE_HEIGHT < platform.top) {
+            // If so, find the position of GigaGal's left and right toes
+            val leftFoot = position.x - STANCE_WIDTH / 2
+            val rightFoot = position.x + STANCE_WIDTH / 2
+
+            // See if either of GigaGal's toes are on the platform
+            val leftFootIn = (platform.left < leftFoot && platform.right > leftFoot)
+
+            val rightFootIn = (platform.left < rightFoot && platform.right > rightFoot)
+
+            // See if GigaGal is straddling the platform
+            val straddle = (platform.left > leftFoot && platform.right < rightFoot)
+
+            // Return whether or not GigaGal had landed on the platform
+            info { (leftFootIn || rightFootIn || straddle).toString() }
+            return leftFootIn || rightFootIn || straddle
+        }
+        return false
     }
 
     private fun moveLeft(delta: Float) {
@@ -159,7 +196,7 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
                 LEFT -> gigaGalAssets.standingLeft
                 RIGHT -> gigaGalAssets.standingRight
             }
-        } else when (facing) /*jumpState != GROUNDED*/{
+        } else when (facing) /*jumpState != GROUNDED*/ {
             LEFT -> gigaGalAssets.jumpingLeft
             RIGHT -> gigaGalAssets.jumpingRight
         }

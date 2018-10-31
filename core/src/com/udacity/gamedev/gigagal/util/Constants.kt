@@ -37,6 +37,9 @@ object Constants {
     //Constant holding the size of the stretchable edges in the platform 9 patch
     const val PLATFORM_EDGE = 8
 
+    // Constant for GigaGal's stance width
+    const val STANCE_WIDTH = 21f
+
     // Constant for walk loop duration
     const val WALK_LOOP_DURATION = 0.25f
 
