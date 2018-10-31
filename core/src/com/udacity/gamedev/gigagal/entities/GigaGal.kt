@@ -108,7 +108,6 @@ class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
             val straddle = (platform.left > leftFoot && platform.right < rightFoot)
 
             // Return whether or not GigaGal had landed on the platform
-            info { (leftFootIn || rightFootIn || straddle).toString() }
             return leftFootIn || rightFootIn || straddle
         }
         return false

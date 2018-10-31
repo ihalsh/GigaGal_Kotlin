@@ -11,8 +11,11 @@ class Level(private val gigaGal: GigaGal = GigaGal(),
             private val platforms: Array<Platform> = Array()) {
 
     init {
-        // Add a test platform
+        // Add a test platforms
         platforms.add(Platform(70f, 30f, 20f, 20f))
+        platforms.add(Platform(10f, 60f, 50f, 15f))
+        platforms.add(Platform(20f, 120f, 40f, 30f))
+        platforms.add(Platform(100f, 90f, 40f, 40f))
     }
 
     fun update(delta: Float) {
