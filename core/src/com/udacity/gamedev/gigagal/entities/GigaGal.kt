@@ -15,8 +15,10 @@ import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
 import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_POSITION
+import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_SPAWN_POSITION
 import com.udacity.gamedev.gigagal.util.Constants.JUMP_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.JumpState.*
+import com.udacity.gamedev.gigagal.util.Constants.KILL_PLANE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.MAX_JUMP_DURATION
 import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
@@ -24,7 +26,7 @@ import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
 import ktx.log.info
 
-class GigaGal(val position: Vector2 = Vector2(20f, 120f),
+class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
               private val lastFramePosition: Vector2 = Vector2(position),
               private val velocity: Vector2 = Vector2(),
               private var facing: Constants.Facing = RIGHT,
@@ -48,15 +50,12 @@ class GigaGal(val position: Vector2 = Vector2(20f, 120f),
 
             jumpState = FALLING
 
-            // Check if GigaGal has landed on the ground
-            // Remember that position keeps track of GigaGal's eye position, not her feet.
-            // If she has indeed landed, change her jumpState to GROUNDED, set her vertical
-            // velocity to 0, and make sure her feet aren't sticking into the floor.
-//            if (position.y - GIGAGAL_EYE_HEIGHT < 0) {
-//                jumpState = GROUNDED
-//                position.y = GIGAGAL_EYE_HEIGHT
-//                velocity.y = 0f
-//            }
+            // Check if GigaGal has fall of the platform
+            if (position.y - GIGAGAL_EYE_HEIGHT < KILL_PLANE_HEIGHT) {
+                jumpState = GROUNDED
+                position.set(Vector2(GIGAGAL_SPAWN_POSITION))
+                velocity.y = 0f
+            }
 
             // For each platform, call landedOnPlatform()
             for (platform in platforms) if (landedOnPlatform(platform)) {

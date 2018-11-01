@@ -46,6 +46,9 @@ object Constants {
     // Vector2 Constant for GigaGal's eye position within her sprites (16, 24)
     val GIGAGAL_EYE_POSITION = Vector2(16f, 24f)
 
+    // Vector2 Constant for GigaGal's spawn position
+    val GIGAGAL_SPAWN_POSITION = Vector2(20f, 120f)
+
     // Float constant for the height of GigaGal's eye above her feet (16)
     const val GIGAGAL_EYE_HEIGHT = 16f
 
@@ -64,6 +67,9 @@ object Constants {
     // Constant for acceleration due to gravity
     // Something like 1000 works well.
     const val GRAVITY = 1000
+
+    // Height of the kill plane.
+    const val KILL_PLANE_HEIGHT = -100f
 
     enum class Facing {
         LEFT, RIGHT
