@@ -7,7 +7,7 @@ import com.udacity.gamedev.gigagal.entities.GigaGal
 import com.udacity.gamedev.gigagal.entities.Platform
 import ktx.graphics.use
 
-class Level(private val gigaGal: GigaGal = GigaGal(),
+class Level(val gigaGal: GigaGal = GigaGal(),
             private val platforms: Array<Platform> = Array()) {
 
     init {

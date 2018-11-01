@@ -24,7 +24,7 @@ import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
 import ktx.log.info
 
-class GigaGal(private val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
+class GigaGal(val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
               private val lastFramePosition: Vector2 = Vector2(position),
               private val velocity: Vector2 = Vector2(),
               private var facing: Constants.Facing = RIGHT,
