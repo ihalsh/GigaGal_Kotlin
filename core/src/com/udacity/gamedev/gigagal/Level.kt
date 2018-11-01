@@ -2,6 +2,7 @@ package com.udacity.gamedev.gigagal
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.udacity.gamedev.gigagal.entities.GigaGal
 import com.udacity.gamedev.gigagal.entities.Platform

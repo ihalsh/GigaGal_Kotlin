@@ -24,7 +24,7 @@ import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
 import ktx.log.info
 
-class GigaGal(val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
+class GigaGal(val position: Vector2 = Vector2(20f, 120f),
               private val lastFramePosition: Vector2 = Vector2(position),
               private val velocity: Vector2 = Vector2(),
               private var facing: Constants.Facing = RIGHT,
@@ -52,11 +52,11 @@ class GigaGal(val position: Vector2 = Vector2(20f, GIGAGAL_EYE_HEIGHT),
             // Remember that position keeps track of GigaGal's eye position, not her feet.
             // If she has indeed landed, change her jumpState to GROUNDED, set her vertical
             // velocity to 0, and make sure her feet aren't sticking into the floor.
-            if (position.y - GIGAGAL_EYE_HEIGHT < 0) {
-                jumpState = GROUNDED
-                position.y = GIGAGAL_EYE_HEIGHT
-                velocity.y = 0f
-            }
+//            if (position.y - GIGAGAL_EYE_HEIGHT < 0) {
+//                jumpState = GROUNDED
+//                position.y = GIGAGAL_EYE_HEIGHT
+//                velocity.y = 0f
+//            }
 
             // For each platform, call landedOnPlatform()
             for (platform in platforms) if (landedOnPlatform(platform)) {
