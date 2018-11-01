@@ -13,10 +13,19 @@ class Level(val gigaGal: GigaGal = GigaGal(),
 
     init {
         // Add a test platforms
-        platforms.add(Platform(70f, 30f, 20f, 20f))
-        platforms.add(Platform(10f, 60f, 50f, 15f))
+        platforms.add(Platform(10f, 60f, 50f, 20f))
         platforms.add(Platform(20f, 120f, 40f, 30f))
+        platforms.add(Platform(70f, 30f, 20f, 20f))
         platforms.add(Platform(100f, 90f, 40f, 40f))
+        platforms.add(Platform(150f, 60f, 50f, 20f))
+        platforms.add(Platform(210f, 90f, 40f, 9f))
+        platforms.add(Platform(260f, 140f, 40f, 9f))
+        platforms.add(Platform(310f, 190f, 40f, 9f))
+        platforms.add(Platform(360f, 140f, 40f, 9f))
+        platforms.add(Platform(410f, 190f, 40f, 9f))
+        platforms.add(Platform(460f, 140f, 40f, 9f))
+        platforms.add(Platform(510f, 90f, 40f, 9f))
+        platforms.add(Platform(560f, 60f, 50f, 20f))
     }
 
     fun update(delta: Float) {
