@@ -64,7 +64,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                 velocity.y = 0f
             }
         }
-
+        // If the jump key wasn't pressed, endJump()
         if (input.isKeyPressed(Keys.SPACE)) {
             // Handle jump key
             when (jumpState) {
@@ -73,11 +73,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                 FALLING -> endJump()
             }
 
-        } else {
-            // If the jump key wasn't pressed, endJump()
-            endJump()
-
-        }
+        } else endJump()
 
         // Uses Gdx.input.isKeyPressed() to check if the left arrow key is pressed
         if (input.isKeyPressed(Keys.LEFT)) {

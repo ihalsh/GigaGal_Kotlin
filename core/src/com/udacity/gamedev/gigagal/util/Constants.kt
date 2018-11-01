@@ -33,6 +33,7 @@ object Constants {
     const val WALK_3_LEFT = "walk-3-left"
     const val WALK_3_RIGHT = "walk-3-right"
     const val PLATFORM_SPRITE = "platform"
+    const val ENEMY_SPRITE = "enemy"
 
     //Constant holding the size of the stretchable edges in the platform 9 patch
     const val PLATFORM_EDGE = 8
@@ -45,6 +46,9 @@ object Constants {
 
     // Vector2 Constant for GigaGal's eye position within her sprites (16, 24)
     val GIGAGAL_EYE_POSITION = Vector2(16f, 24f)
+
+    // Vector2 Constant for the center of the enemy (14, 22)
+    val ENEMY_CENTER_POSITION = Vector2(14f, 22f)
 
     // Vector2 Constant for GigaGal's spawn position
     val GIGAGAL_SPAWN_POSITION = Vector2(20f, 120f)
@@ -70,6 +74,9 @@ object Constants {
 
     // Height of the kill plane.
     const val KILL_PLANE_HEIGHT = -100f
+
+    // Chase cam move speed constant
+    const val CAMERA_MOVE_SPEED = 220
 
     enum class Facing {
         LEFT, RIGHT

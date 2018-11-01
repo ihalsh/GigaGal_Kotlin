@@ -22,7 +22,7 @@ class GameplayScreen(
 
         level.update(delta)
 
-        chaseCam.update()
+        chaseCam.update(delta)
 
         viewport.apply()
 

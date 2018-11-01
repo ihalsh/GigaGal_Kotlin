@@ -26,6 +26,7 @@ object Assets : Disposable, AssetErrorListener {
     private val assetManager by lazy { AssetManager() }
     lateinit var gigaGalAssets: GigaGalAssets
     lateinit var platformAssets: PlatformAssets
+    lateinit var enemyAssets: EnemyAssets
 
     init {
         with(assetManager) {
@@ -35,6 +36,7 @@ object Assets : Disposable, AssetErrorListener {
             val atlas = get<TextureAtlas>(Constants.TEXTURE_ATLAS)
             gigaGalAssets = GigaGalAssets(atlas)
             platformAssets = PlatformAssets(atlas)
+            enemyAssets = EnemyAssets(atlas)
         }
         logger { "Assets loading... Ok" }
     }
@@ -78,12 +80,15 @@ object Assets : Disposable, AssetErrorListener {
     }
 
     class PlatformAssets(atlas: TextureAtlas,
-                          val platformNinePatch: NinePatch
-                          = NinePatch(atlas.findRegion(Constants.PLATFORM_SPRITE),
-                                  PLATFORM_EDGE,
-                                  PLATFORM_EDGE,
-                                  PLATFORM_EDGE,
-                                  PLATFORM_EDGE))
+                         val platformNinePatch: NinePatch
+                         = NinePatch(atlas.findRegion(Constants.PLATFORM_SPRITE),
+                                 PLATFORM_EDGE,
+                                 PLATFORM_EDGE,
+                                 PLATFORM_EDGE,
+                                 PLATFORM_EDGE))
+
+    class EnemyAssets(atlas: TextureAtlas,
+                      val enemy: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.ENEMY_SPRITE))
 }
 
 
