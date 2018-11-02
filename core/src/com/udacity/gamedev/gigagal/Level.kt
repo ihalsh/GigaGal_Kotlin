@@ -1,24 +1,33 @@
 package com.udacity.gamedev.gigagal
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.DelayedRemovalArray
 import com.udacity.gamedev.gigagal.entities.Enemy
 import com.udacity.gamedev.gigagal.entities.GigaGal
 import com.udacity.gamedev.gigagal.entities.Platform
+import com.udacity.gamedev.gigagal.util.Constants
+import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
+import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_SPAWN_POSITION
+import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
+import com.udacity.gamedev.gigagal.util.Utils
 import ktx.graphics.use
 
-class Level(val gigaGal: GigaGal = GigaGal(),
-            private val platforms: Array<Platform> = Array(),
-            private val enemies: Array<Enemy> = DelayedRemovalArray(),
-            private val enemy: Enemy = Enemy()) {
+class Level(private val platforms: Array<Platform> = Array(),
+            val enemies: Array<Enemy> = DelayedRemovalArray()
+            /*,private val enemy: Enemy = Enemy()*/) {
+
+    val gigaGal: GigaGal = GigaGal(level = this)
 
     init {
+
         // Add a test platforms
         platforms.add(Platform(10f, 60f, 50f, 20f))
-        platforms.add(Platform(20f, 120f, 40f, 30f))
+        platforms.add(Platform(20f, 120f, 60f, 20f))
         platforms.add(Platform(70f, 30f, 20f, 20f))
-        val enemyPlatform = Platform(100f, 90f, 70f, 40f)
+        val enemyPlatform = Platform(80f, 80f, 70f, 30f)
         platforms.add(enemyPlatform)
         platforms.add(Platform(150f, 60f, 50f, 20f))
         platforms.add(Platform(210f, 90f, 40f, 9f))
@@ -51,6 +60,8 @@ class Level(val gigaGal: GigaGal = GigaGal(),
         // KTX way of using SpriteBatch
         batch.use { gigaGal.render(it)
         }
+
+        Utils.boundsRender(gigaGal = gigaGal, batch = batch)
 
         // Render the enemies
         for (enemy in enemies) batch.use { enemy.render(it) }

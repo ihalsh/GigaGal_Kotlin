@@ -59,6 +59,9 @@ object Constants {
     // Constant for GigaGal's movement speed
     val MOVEMENT_SPEED = Vector2(75f, 0f)
 
+    // Constant for knockback velocity
+    val KNOCKBACK_VELOCITY = Vector2(200f, 200f)
+
     // Constant for GigaGal's jump speed
     // Something around 250 works well.
     const val JUMP_SPEED = 250f
@@ -82,10 +85,13 @@ object Constants {
     const val ENEMY_MOVEMENT_SPEED = 10
 
     // ENEMY_BOB_AMPLITUDE constant.
-    val ENEMY_BOB_AMPLITUDE = 2f
+    const val ENEMY_BOB_AMPLITUDE = 2f
 
     // ENEMY_BOB_PERIOD constant.
-    val ENEMY_BOB_PERIOD = 2.0f
+    const val ENEMY_BOB_PERIOD = 2.0f
+
+    // Constant for enemy collision radius (15 is about right)
+    const val ENEMY_COLLISION_RADIUS = 15f
 
     enum class Facing {
         LEFT, RIGHT

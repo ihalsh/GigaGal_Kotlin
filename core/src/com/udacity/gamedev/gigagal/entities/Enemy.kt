@@ -15,7 +15,7 @@ import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 
 class Enemy(private val platform: Platform = Platform(),
-            private val position: Vector2 = Vector2(platform.left - ENEMY_CENTER_POSITION.x, platform.top),
+            val position: Vector2 = Vector2(platform.left - ENEMY_CENTER_POSITION.x, platform.top),
             private var direction: Constants.Facing = RIGHT,
             private val startTime: Long = nanoTime()) {
 

@@ -5,26 +5,29 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.TimeUtils
-import com.badlogic.gdx.utils.reflect.ArrayReflection.set
+import com.udacity.gamedev.gigagal.Level
 import com.udacity.gamedev.gigagal.util.Assets.gigaGalAssets
 import com.udacity.gamedev.gigagal.util.Constants
+import com.udacity.gamedev.gigagal.util.Constants.ENEMY_COLLISION_RADIUS
 import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
 import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_POSITION
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_SPAWN_POSITION
+import com.udacity.gamedev.gigagal.util.Constants.GRAVITY
 import com.udacity.gamedev.gigagal.util.Constants.JUMP_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.JumpState.*
 import com.udacity.gamedev.gigagal.util.Constants.KILL_PLANE_HEIGHT
+import com.udacity.gamedev.gigagal.util.Constants.KNOCKBACK_VELOCITY
 import com.udacity.gamedev.gigagal.util.Constants.MAX_JUMP_DURATION
 import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
-import com.udacity.gamedev.gigagal.util.Utils
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 import ktx.log.info
 
@@ -35,14 +38,18 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
               private var jumpState: Constants.JumpState = FALLING,
               private var jumpStartTime: Long = 0,
               private var walkStartTime: Long = 0,
-              private var walkState: Constants.WalkState = STANDING) {
+              private var walkState: Constants.WalkState = STANDING,
+              private val level: Level) {
+
+    lateinit var gigaGalBounds: Rectangle
+    lateinit var enemyBounds: Rectangle
 
     fun update(delta: Float, platforms: Array<Platform>) {
         // Update lastFramePosition
         lastFramePosition.set(position)
 
         // Accelerate GigaGal down
-        velocity.y -= delta * Constants.GRAVITY
+        velocity.y -= delta * GRAVITY
 
         // Apply GigaGal's velocity to her position
         position.mulAdd(velocity, delta)
@@ -56,7 +63,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
             if (position.y - GIGAGAL_EYE_HEIGHT < KILL_PLANE_HEIGHT) {
                 jumpState = GROUNDED
                 position.set(Vector2(GIGAGAL_SPAWN_POSITION))
-                velocity.y = 0f
+                velocity.set(0f, 0f)
             }
 
             // For each platform, call landedOnPlatform()
@@ -66,7 +73,35 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                 velocity.y = 0f
             }
         }
-        // If the jump key wasn't pressed, endJump()
+
+        // Collide with enemies
+
+        // Define GigaGal bounding rectangle
+        gigaGalBounds = Rectangle(position.x - STANCE_WIDTH / 2,
+                position.y - GIGAGAL_EYE_HEIGHT,
+                STANCE_WIDTH,
+                GIGAGAL_EYE_HEIGHT)
+
+        for (enemy in level.enemies) {
+            // Define enemy bounding rectangle
+            enemyBounds = Rectangle(
+                    enemy.position.x,
+                    enemy.position.y + ENEMY_COLLISION_RADIUS / 2,
+                    2 * ENEMY_COLLISION_RADIUS,
+                    2 * ENEMY_COLLISION_RADIUS)
+            // If GigaGal overlaps an enemy, log the direction from which she hit it
+            when {
+                gigaGalBounds.overlaps(enemyBounds) -> if (position.x < enemy.position.x) {
+                    info { "Hit an enemy from the left" }
+                    recoilFromEnemy(RIGHT)
+                } else {
+                    info { "Hit an enemy from the right" }
+                    recoilFromEnemy(LEFT)
+                }
+            }
+        }
+
+        // Jump
         if (input.isKeyPressed(Keys.SPACE)) {
             // Handle jump key
             when (jumpState) {
@@ -74,15 +109,25 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                 JUMPING -> continueJump()
                 FALLING -> endJump()
             }
-
         } else endJump()
 
-        // Uses Gdx.input.isKeyPressed() to check if the left arrow key is pressed
+        // Move left/right
         if (input.isKeyPressed(Keys.LEFT)) {
             moveLeft(delta)
         } else if (input.isKeyPressed(Keys.RIGHT)) {
             moveRight(delta)
         } else walkState = STANDING
+    }
+
+    private fun recoilFromEnemy(direction: Constants.Facing) {
+
+        // GigaGal's horizontal speed (in the correct direction)
+        when(direction) {
+            RIGHT -> velocity.x = -KNOCKBACK_VELOCITY.x
+            LEFT -> velocity.x = KNOCKBACK_VELOCITY.x
+        }
+        // GigaGal's vertical speed
+        velocity.y = KNOCKBACK_VELOCITY.y
     }
 
     private fun landedOnPlatform(platform: Platform): Boolean {
