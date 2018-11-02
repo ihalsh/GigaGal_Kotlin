@@ -57,7 +57,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
         // If GigaGal isn't JUMPING, make her now FALLING
         if (jumpState != JUMPING) {
 
-            jumpState = FALLING
+            if (jumpState != RECOILING) jumpState = FALLING
 
             // Check if GigaGal has fall of the platform
             if (position.y - GIGAGAL_EYE_HEIGHT < KILL_PLANE_HEIGHT) {
@@ -67,10 +67,12 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
             }
 
             // For each platform, call landedOnPlatform()
-            for (platform in platforms) if (landedOnPlatform(platform)) {
-                jumpState = GROUNDED
-                position.y = platform.top + GIGAGAL_EYE_HEIGHT
-                velocity.y = 0f
+            for (platform in platforms) when {
+                landedOnPlatform(platform) -> {
+                    jumpState = GROUNDED
+                    position.y = platform.top + GIGAGAL_EYE_HEIGHT
+                    velocity.set(0f, 0f)
+                }
             }
         }
 
@@ -107,19 +109,22 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
             when (jumpState) {
                 GROUNDED -> startJump()
                 JUMPING -> continueJump()
-                FALLING -> endJump()
             }
         } else endJump()
 
         // Move left/right
-        if (input.isKeyPressed(Keys.LEFT)) {
-            moveLeft(delta)
-        } else if (input.isKeyPressed(Keys.RIGHT)) {
-            moveRight(delta)
-        } else walkState = STANDING
+
+        if (jumpState != RECOILING) when {
+            input.isKeyPressed(Keys.LEFT) -> moveLeft(delta)
+            input.isKeyPressed(Keys.RIGHT) -> moveRight(delta)
+            else -> walkState = STANDING
+        }
     }
 
     private fun recoilFromEnemy(direction: Constants.Facing) {
+
+        // Set RECOILING jump state
+        jumpState = RECOILING
 
         // GigaGal's horizontal speed (in the correct direction)
         when(direction) {

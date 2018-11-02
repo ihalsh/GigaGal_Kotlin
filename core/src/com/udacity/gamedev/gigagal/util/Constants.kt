@@ -17,7 +17,7 @@ object Constants {
      * of an ExtendViewport, and we'll run the game in landscape mode, so this will really end up
      * specifying the height of the world. We recommend 128.
      */
-    const val WORLD_SIZE = 128f
+    const val WORLD_SIZE = 192f
 
     const val TEXTURE_ATLAS = "images/gigagal.pack.atlas"
 
@@ -57,7 +57,7 @@ object Constants {
     const val GIGAGAL_EYE_HEIGHT = 16f
 
     // Constant for GigaGal's movement speed
-    val MOVEMENT_SPEED = Vector2(75f, 0f)
+    val MOVEMENT_SPEED = Vector2(100f, 0f)
 
     // Constant for knockback velocity
     val KNOCKBACK_VELOCITY = Vector2(200f, 200f)
@@ -98,7 +98,7 @@ object Constants {
     }
 
     enum class JumpState {
-        JUMPING, FALLING, GROUNDED
+        JUMPING, FALLING, GROUNDED, RECOILING
     }
     enum class WalkState {
         STANDING, WALKING
