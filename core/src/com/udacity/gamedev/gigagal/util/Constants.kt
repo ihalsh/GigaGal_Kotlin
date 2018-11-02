@@ -78,6 +78,9 @@ object Constants {
     // Chase cam move speed constant
     const val CAMERA_MOVE_SPEED = 220
 
+    // Constant for ENEMY_MOVEMENT_SPEED.
+    const val ENEMY_MOVEMENT_SPEED = 10
+
     enum class Facing {
         LEFT, RIGHT
     }

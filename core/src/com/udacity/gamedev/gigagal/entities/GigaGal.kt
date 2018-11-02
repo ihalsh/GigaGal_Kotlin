@@ -24,6 +24,8 @@ import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
+import com.udacity.gamedev.gigagal.util.Utils
+import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 import ktx.log.info
 
 class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
@@ -195,23 +197,11 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
             RIGHT -> gigaGalAssets.jumpingRight
         }
 
-        batch.draw(
-                region.texture,
+        drawBatch(batch, region, Vector2(
                 position.x - GIGAGAL_EYE_POSITION.x,
-                position.y - GIGAGAL_EYE_POSITION.y,
-                0f,
-                0f,
-                region.regionWidth.toFloat(),
-                region.regionHeight.toFloat(),
-                1f,
-                1f,
-                0f,
-                region.regionX,
-                region.regionY,
-                region.regionWidth,
-                region.regionHeight,
-                false,
-                false)
+                position.y - GIGAGAL_EYE_POSITION.y
+        ))
+
     }
 
     companion object {

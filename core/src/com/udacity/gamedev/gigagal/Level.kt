@@ -17,9 +17,9 @@ class Level(val gigaGal: GigaGal = GigaGal(),
         // Add a test platforms
         platforms.add(Platform(10f, 60f, 50f, 20f))
         platforms.add(Platform(20f, 120f, 40f, 30f))
-        val enemyPlatform = Platform(70f, 30f, 20f, 20f)
+        platforms.add(Platform(70f, 30f, 20f, 20f))
+        val enemyPlatform = Platform(100f, 90f, 70f, 40f)
         platforms.add(enemyPlatform)
-        platforms.add(Platform(100f, 90f, 40f, 40f))
         platforms.add(Platform(150f, 60f, 50f, 20f))
         platforms.add(Platform(210f, 90f, 40f, 9f))
         platforms.add(Platform(260f, 140f, 40f, 9f))
