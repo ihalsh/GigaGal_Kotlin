@@ -81,6 +81,12 @@ object Constants {
     // Constant for ENEMY_MOVEMENT_SPEED.
     const val ENEMY_MOVEMENT_SPEED = 10
 
+    // ENEMY_BOB_AMPLITUDE constant.
+    val ENEMY_BOB_AMPLITUDE = 2f
+
+    // ENEMY_BOB_PERIOD constant.
+    val ENEMY_BOB_PERIOD = 2.0f
+
     enum class Facing {
         LEFT, RIGHT
     }
