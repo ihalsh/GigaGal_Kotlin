@@ -26,7 +26,7 @@ class Level(private val platforms: Array<Platform> = Array(),
         platforms.add(Platform(10f, 60f, 50f, 20f))
         platforms.add(Platform(20f, 120f, 60f, 20f))
         platforms.add(Platform(70f, 30f, 20f, 20f))
-        val enemyPlatform = Platform(80f, 80f, 70f, 30f)
+        val enemyPlatform = Platform(80f, 60f, 70f, 30f)
         platforms.add(enemyPlatform)
         platforms.add(Platform(150f, 60f, 50f, 20f))
         platforms.add(Platform(210f, 90f, 40f, 9f))
@@ -47,7 +47,12 @@ class Level(private val platforms: Array<Platform> = Array(),
         gigaGal.update(delta, platforms)
 
         // Update the enemies
-        for (enemy in enemies) enemy.update(delta)
+        for (enemy in enemies) {
+            with(enemy) {
+                update(delta)
+                if (healthCounter <1 ) enemies.removeValue(this, true)
+            }
+        }
 
         // Update the bullets
         for (bullet in bullets) {
@@ -66,8 +71,6 @@ class Level(private val platforms: Array<Platform> = Array(),
 
         // KTX way of using SpriteBatch
         batch.use { gigaGal.render(it) }
-
-        Utils.boundsRender(gigaGal = gigaGal, batch = batch)
 
         // Render the enemies
         for (enemy in enemies) batch.use { enemy.render(it) }

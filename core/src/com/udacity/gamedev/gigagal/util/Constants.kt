@@ -56,6 +56,7 @@ object Constants {
     const val ENEMY_BOB_PERIOD = 2.0f
     const val ENEMY_COLLISION_RADIUS = 15f
     val ENEMY_CENTER_POSITION = Vector2(14f, 22f)
+    const val ENEMY_HEALTH = 5
 
     // Bullets
     const val BULLET_SPRITE = "bullet"

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2
 import com.udacity.gamedev.gigagal.Level
 import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.Constants
+import com.udacity.gamedev.gigagal.util.Constants.ENEMY_COLLISION_RADIUS
 import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
 import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
@@ -30,6 +31,17 @@ class Bullet(private val position: Vector2 = Vector2(),
         // If the bullet is offscreen, set active = false
         if (position.x < camXposition - worldWidth / 2
                 || position.x > camXposition + worldWidth / 2) isActive = false
+
+        //Check if the bullet is within the enemy
+        for (enemy in level.enemies) {
+            if (position.dst(Vector2(
+                            enemy.position.x + ENEMY_COLLISION_RADIUS,
+                            enemy.position.y + ENEMY_COLLISION_RADIUS
+                    )) < (ENEMY_COLLISION_RADIUS)) {
+                isActive = false
+                enemy.healthCounter--
+            }
+        }
     }
 
     fun render(batch: SpriteBatch) {

@@ -9,6 +9,7 @@ import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_BOB_AMPLITUDE
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_BOB_PERIOD
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_CENTER_POSITION
+import com.udacity.gamedev.gigagal.util.Constants.ENEMY_HEALTH
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_MOVEMENT_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
 import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
@@ -17,7 +18,8 @@ import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 class Enemy(private val platform: Platform = Platform(),
             val position: Vector2 = Vector2(platform.left - ENEMY_CENTER_POSITION.x, platform.top),
             private var direction: Constants.Facing = RIGHT,
-            private val startTime: Long = nanoTime()) {
+            private val startTime: Long = nanoTime(),
+            var healthCounter:Int = ENEMY_HEALTH) {
 
     fun update(delta: Float) {
 

@@ -32,23 +32,5 @@ class Utils {
         }
 
         fun timeSinceInSec(time: Long) = (MathUtils.nanoToSec * (TimeUtils.timeSinceNanos(time)))
-
-        fun boundsRender(renderer: ShapeRenderer = ShapeRenderer(), gigaGal: GigaGal, batch: SpriteBatch) {
-            renderer.setAutoShapeType(true)
-            renderer.projectionMatrix = batch.projectionMatrix
-            renderer.begin()
-            renderer.rect(gigaGal.gigaGalBounds.x,
-                    gigaGal.gigaGalBounds.y,
-                    gigaGal.gigaGalBounds.width,
-                    gigaGal.gigaGalBounds.height)
-
-            renderer.rect(
-                    gigaGal.enemyBounds.x,
-                    gigaGal.enemyBounds.y,
-                    gigaGal.enemyBounds.width,
-                    gigaGal.enemyBounds.height)
-
-            renderer.end()
-        }
     }
 }
