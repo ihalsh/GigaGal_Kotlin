@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.TimeUtils
 import com.udacity.gamedev.gigagal.Level
 import com.udacity.gamedev.gigagal.util.Assets.gigaGalAssets
 import com.udacity.gamedev.gigagal.util.Constants
+import com.udacity.gamedev.gigagal.util.Constants.BULLET_DELAY
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_COLLISION_RADIUS
 import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
 import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
@@ -29,12 +30,13 @@ import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
+import com.udacity.gamedev.gigagal.util.Utils.Companion.timeSinceInSec
 import ktx.log.info
 
 class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
               private val lastFramePosition: Vector2 = Vector2(position),
               private val velocity: Vector2 = Vector2(),
-              private var facing: Constants.Facing = RIGHT,
+              var facing: Constants.Facing = RIGHT,
               private var jumpState: Constants.JumpState = FALLING,
               private var jumpStartTime: Long = 0,
               private var walkStartTime: Long = 0,
@@ -43,6 +45,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
 
     lateinit var gigaGalBounds: Rectangle
     lateinit var enemyBounds: Rectangle
+    private var shootTime: Long = TimeUtils.nanoTime()
 
     fun update(delta: Float, platforms: Array<Platform>) {
         // Update lastFramePosition
@@ -113,11 +116,19 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
         } else endJump()
 
         // Move left/right
-
         if (jumpState != RECOILING) when {
             input.isKeyPressed(Keys.LEFT) -> moveLeft(delta)
             input.isKeyPressed(Keys.RIGHT) -> moveRight(delta)
             else -> walkState = STANDING
+        }
+
+        // Fire! /*&& TimeUtils.timeSinceMillis(shootTime) > 500)*/
+        if (input.isKeyPressed(Keys.X) &&
+                timeSinceInSec(shootTime) > BULLET_DELAY) {
+            shootTime = TimeUtils.nanoTime()
+            val bulletPosition = Vector2()
+            bulletPosition.set(position)
+            level.spawnBullet(bulletPosition, facing)
         }
     }
 
@@ -127,7 +138,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
         jumpState = RECOILING
 
         // GigaGal's horizontal speed (in the correct direction)
-        when(direction) {
+        when (direction) {
             RIGHT -> velocity.x = -KNOCKBACK_VELOCITY.x
             LEFT -> velocity.x = KNOCKBACK_VELOCITY.x
         }

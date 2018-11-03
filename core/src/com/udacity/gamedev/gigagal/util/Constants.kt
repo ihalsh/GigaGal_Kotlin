@@ -61,6 +61,7 @@ object Constants {
     const val BULLET_SPRITE = "bullet"
     val BULLET_CENTER = Vector2(3f, 2f)
     const val BULLET_SPEED = 250f
+    const val BULLET_DELAY = 0.1
 
     // Explosions
     const val EXPLOSION_LARGE = "explosion-large"

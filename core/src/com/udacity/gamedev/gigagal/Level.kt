@@ -41,30 +41,12 @@ class Level(private val platforms: Array<Platform> = Array(),
         enemies.add(Enemy(enemyPlatform))
     }
 
-    private fun spawnBullet(position: Vector2, direction: Constants.Facing) {
-        bullets.add(Bullet(position, direction))
-    }
-
     fun update(delta: Float) {
         // Update GigaGal
         gigaGal.update(delta, platforms)
 
         // Update the enemies
         for (enemy in enemies) enemy.update(delta)
-
-        // BULLET STORM!
-
-        // Spawn a bullet in a random direction, at a random position
-        var bulletDirection: Constants.Facing = Constants.Facing.LEFT
-        if (Math.round(Random.nextFloat()).toString() == "1")
-            bulletDirection = Constants.Facing.RIGHT
-
-        val bulletPosition = Vector2(
-                10f + Random.nextFloat()*Constants.WORLD_SIZE - 10f,
-                10f + Random.nextFloat()*150f
-        )
-
-        spawnBullet(position = bulletPosition, direction = bulletDirection)
 
         // Update the bullets
         for (bullet in bullets) bullet.update(delta)
@@ -87,6 +69,16 @@ class Level(private val platforms: Array<Platform> = Array(),
 
         // Render the bullets
         for (bullet in bullets) batch.use { bullet.render(it) }
+    }
 
+    fun spawnBullet(position: Vector2, direction: Constants.Facing) {
+        when (direction) {
+            Constants.Facing.RIGHT -> bullets.add(Bullet(Vector2(
+                    position.x + 10,
+                    position.y-9), direction))
+            Constants.Facing.LEFT -> bullets.add(Bullet(Vector2(
+                    position.x - 14.5f,
+                    position.y-9), direction))
+        }
     }
 }
