@@ -126,9 +126,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
         if (input.isKeyPressed(Keys.X) &&
                 timeSinceInSec(shootTime) > BULLET_DELAY) {
             shootTime = TimeUtils.nanoTime()
-            val bulletPosition = Vector2()
-            bulletPosition.set(position)
-            level.spawnBullet(bulletPosition, facing)
+            level.spawnBullet(position, facing, level)
         }
     }
 

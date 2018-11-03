@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.DelayedRemovalArray
+import com.badlogic.gdx.utils.viewport.Viewport
 import com.udacity.gamedev.gigagal.entities.Bullet
 import com.udacity.gamedev.gigagal.entities.Enemy
 import com.udacity.gamedev.gigagal.entities.GigaGal
@@ -11,11 +12,11 @@ import com.udacity.gamedev.gigagal.entities.Platform
 import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Utils
 import ktx.graphics.use
-import kotlin.random.Random
 
 class Level(private val platforms: Array<Platform> = Array(),
             val enemies: Array<Enemy> = DelayedRemovalArray(),
-            private val bullets: Array<Bullet> = DelayedRemovalArray()) {
+            private val bullets: Array<Bullet> = DelayedRemovalArray(),
+            val viewport: Viewport) {
 
     val gigaGal: GigaGal = GigaGal(level = this)
 
@@ -49,8 +50,12 @@ class Level(private val platforms: Array<Platform> = Array(),
         for (enemy in enemies) enemy.update(delta)
 
         // Update the bullets
-        for (bullet in bullets) bullet.update(delta)
-
+        for (bullet in bullets) {
+            with(bullet) {
+                update(delta)
+                if (!isActive) bullets.removeValue(this, true)
+            }
+        }
     }
 
     fun render(batch: SpriteBatch) {
@@ -71,14 +76,14 @@ class Level(private val platforms: Array<Platform> = Array(),
         for (bullet in bullets) batch.use { bullet.render(it) }
     }
 
-    fun spawnBullet(position: Vector2, direction: Constants.Facing) {
+    fun spawnBullet(position: Vector2, direction: Constants.Facing, level: Level) {
         when (direction) {
             Constants.Facing.RIGHT -> bullets.add(Bullet(Vector2(
                     position.x + 10,
-                    position.y-9), direction))
+                    position.y - 9), direction, level))
             Constants.Facing.LEFT -> bullets.add(Bullet(Vector2(
                     position.x - 14.5f,
-                    position.y-9), direction))
+                    position.y - 9), direction, level))
         }
     }
 }
