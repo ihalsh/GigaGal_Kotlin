@@ -1,26 +1,21 @@
 package com.udacity.gamedev.gigagal
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.DelayedRemovalArray
+import com.udacity.gamedev.gigagal.entities.Bullet
 import com.udacity.gamedev.gigagal.entities.Enemy
 import com.udacity.gamedev.gigagal.entities.GigaGal
 import com.udacity.gamedev.gigagal.entities.Platform
-import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.Constants
-import com.udacity.gamedev.gigagal.util.Constants.EXPLOSION_DURATION
-import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
-import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_SPAWN_POSITION
-import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Utils
-import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 import ktx.graphics.use
+import kotlin.random.Random
 
 class Level(private val platforms: Array<Platform> = Array(),
-            val enemies: Array<Enemy> = DelayedRemovalArray()
-            /*,private val enemy: Enemy = Enemy()*/) {
+            val enemies: Array<Enemy> = DelayedRemovalArray(),
+            private val bullets: Array<Bullet> = DelayedRemovalArray()) {
 
     val gigaGal: GigaGal = GigaGal(level = this)
 
@@ -46,12 +41,34 @@ class Level(private val platforms: Array<Platform> = Array(),
         enemies.add(Enemy(enemyPlatform))
     }
 
+    private fun spawnBullet(position: Vector2, direction: Constants.Facing) {
+        bullets.add(Bullet(position, direction))
+    }
+
     fun update(delta: Float) {
         // Update GigaGal
         gigaGal.update(delta, platforms)
 
         // Update the enemies
         for (enemy in enemies) enemy.update(delta)
+
+        // BULLET STORM!
+
+        // Spawn a bullet in a random direction, at a random position
+        var bulletDirection: Constants.Facing = Constants.Facing.LEFT
+        if (Math.round(Random.nextFloat()).toString() == "1")
+            bulletDirection = Constants.Facing.RIGHT
+
+        val bulletPosition = Vector2(
+                10f + Random.nextFloat()*Constants.WORLD_SIZE - 10f,
+                10f + Random.nextFloat()*150f
+        )
+
+        spawnBullet(position = bulletPosition, direction = bulletDirection)
+
+        // Update the bullets
+        for (bullet in bullets) bullet.update(delta)
+
     }
 
     fun render(batch: SpriteBatch) {
@@ -68,23 +85,8 @@ class Level(private val platforms: Array<Platform> = Array(),
         // Render the enemies
         for (enemy in enemies) batch.use { enemy.render(it) }
 
-        // Test draw the bullet
-        batch.use { drawBatch(batch, Assets.bulletAssets.bullet, Vector2(40f, 68f)) }
+        // Render the bullets
+        for (bullet in bullets) batch.use { bullet.render(it) }
 
-        // Test draw the powerup
-        batch.use { drawBatch(batch, Assets.powerupAssets.powerup, Vector2(50f, 68f)) }
-
-        // Test draw frames of the explosion
-        batch.use { drawBatch(
-                batch,
-                Assets.explosionAssets.explosionAnimation.getKeyFrame(0f),
-                Vector2(0f, 68f)
-        ) }
-
-        batch.use { drawBatch(
-                batch,
-                Assets.explosionAssets.explosionAnimation.getKeyFrame(EXPLOSION_DURATION),
-                Vector2(0f, 50f)
-        ) }
     }
 }

@@ -54,8 +54,6 @@ class Enemy(private val platform: Platform = Platform(),
 
     fun render(batch: SpriteBatch) {
 
-        // Draw the platform using the NinePatch
-        val region = Assets.enemyAssets.enemy
-        drawBatch(batch, region, position)
+        drawBatch(batch, Assets.enemyAssets.enemy, position)
     }
 }

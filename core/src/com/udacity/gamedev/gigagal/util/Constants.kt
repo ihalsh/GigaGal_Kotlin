@@ -58,18 +58,19 @@ object Constants {
     val ENEMY_CENTER_POSITION = Vector2(14f, 22f)
 
     // Bullets
-    val BULLET_SPRITE = "bullet"
+    const val BULLET_SPRITE = "bullet"
     val BULLET_CENTER = Vector2(3f, 2f)
+    const val BULLET_SPEED = 250f
 
     // Explosions
-    val EXPLOSION_LARGE = "explosion-large"
-    val EXPLOSION_MEDIUM = "explosion-medium"
-    val EXPLOSION_SMALL = "explosion-small"
+    const val EXPLOSION_LARGE = "explosion-large"
+    const val EXPLOSION_MEDIUM = "explosion-medium"
+    const val EXPLOSION_SMALL = "explosion-small"
     val EXPLOSION_CENTER = Vector2(8f, 8f)
-    val EXPLOSION_DURATION = 0.5f
+    const val EXPLOSION_DURATION = 0.5f
 
     // Powerups
-    val POWERUP_SPRITE = "powerup"
+    const val POWERUP_SPRITE = "powerup"
     val POWERUP_CENTER = Vector2(7f, 5f)
 
     // Height of the kill plane.
