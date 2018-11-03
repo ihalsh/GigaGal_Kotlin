@@ -8,11 +8,14 @@ import com.badlogic.gdx.utils.DelayedRemovalArray
 import com.udacity.gamedev.gigagal.entities.Enemy
 import com.udacity.gamedev.gigagal.entities.GigaGal
 import com.udacity.gamedev.gigagal.entities.Platform
+import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.Constants
+import com.udacity.gamedev.gigagal.util.Constants.EXPLOSION_DURATION
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_SPAWN_POSITION
 import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Utils
+import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 import ktx.graphics.use
 
 class Level(private val platforms: Array<Platform> = Array(),
@@ -58,12 +61,30 @@ class Level(private val platforms: Array<Platform> = Array(),
             batch.use { platform.render(it) }
 
         // KTX way of using SpriteBatch
-        batch.use { gigaGal.render(it)
-        }
+        batch.use { gigaGal.render(it) }
 
         Utils.boundsRender(gigaGal = gigaGal, batch = batch)
 
         // Render the enemies
         for (enemy in enemies) batch.use { enemy.render(it) }
+
+        // Test draw the bullet
+        batch.use { drawBatch(batch, Assets.bulletAssets.bullet, Vector2(40f, 68f)) }
+
+        // Test draw the powerup
+        batch.use { drawBatch(batch, Assets.powerupAssets.powerup, Vector2(50f, 68f)) }
+
+        // Test draw frames of the explosion
+        batch.use { drawBatch(
+                batch,
+                Assets.explosionAssets.explosionAnimation.getKeyFrame(0f),
+                Vector2(0f, 68f)
+        ) }
+
+        batch.use { drawBatch(
+                batch,
+                Assets.explosionAssets.explosionAnimation.getKeyFrame(EXPLOSION_DURATION),
+                Vector2(0f, 50f)
+        ) }
     }
 }

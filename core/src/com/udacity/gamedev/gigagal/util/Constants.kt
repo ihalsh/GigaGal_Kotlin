@@ -38,42 +38,39 @@ object Constants {
     //Constant holding the size of the stretchable edges in the platform 9 patch
     const val PLATFORM_EDGE = 8
 
-    // Constant for GigaGal's stance width
+    // GigaGal
     const val STANCE_WIDTH = 21f
-
-    // Constant for walk loop duration
     const val WALK_LOOP_DURATION = 0.25f
-
-    // Vector2 Constant for GigaGal's eye position within her sprites (16, 24)
     val GIGAGAL_EYE_POSITION = Vector2(16f, 24f)
+    val GIGAGAL_SPAWN_POSITION = Vector2(20f, 120f)
+    const val GIGAGAL_EYE_HEIGHT = 16f
+    val MOVEMENT_SPEED = Vector2(100f, 0f)
+    val KNOCKBACK_VELOCITY = Vector2(200f, 200f)
+    const val JUMP_SPEED = 250f
+    const val MAX_JUMP_DURATION = 0.15
+    const val GRAVITY = 1000
 
-    // Vector2 Constant for the center of the enemy (14, 22)
+    // ENEMY
+    const val ENEMY_MOVEMENT_SPEED = 10
+    const val ENEMY_BOB_AMPLITUDE = 2f
+    const val ENEMY_BOB_PERIOD = 2.0f
+    const val ENEMY_COLLISION_RADIUS = 15f
     val ENEMY_CENTER_POSITION = Vector2(14f, 22f)
 
-    // Vector2 Constant for GigaGal's spawn position
-    val GIGAGAL_SPAWN_POSITION = Vector2(20f, 120f)
+    // Bullets
+    val BULLET_SPRITE = "bullet"
+    val BULLET_CENTER = Vector2(3f, 2f)
 
-    // Float constant for the height of GigaGal's eye above her feet (16)
-    const val GIGAGAL_EYE_HEIGHT = 16f
+    // Explosions
+    val EXPLOSION_LARGE = "explosion-large"
+    val EXPLOSION_MEDIUM = "explosion-medium"
+    val EXPLOSION_SMALL = "explosion-small"
+    val EXPLOSION_CENTER = Vector2(8f, 8f)
+    val EXPLOSION_DURATION = 0.5f
 
-    // Constant for GigaGal's movement speed
-    val MOVEMENT_SPEED = Vector2(100f, 0f)
-
-    // Constant for knockback velocity
-    val KNOCKBACK_VELOCITY = Vector2(200f, 200f)
-
-    // Constant for GigaGal's jump speed
-    // Something around 250 works well.
-    const val JUMP_SPEED = 250f
-
-    // Constant for GigaGal's max jump duration
-    // Meaning how long you can hold the jump key to continue to jump higher.
-    // 0.15 seconds works well
-    const val MAX_JUMP_DURATION = 0.15
-
-    // Constant for acceleration due to gravity
-    // Something like 1000 works well.
-    const val GRAVITY = 1000
+    // Powerups
+    val POWERUP_SPRITE = "powerup"
+    val POWERUP_CENTER = Vector2(7f, 5f)
 
     // Height of the kill plane.
     const val KILL_PLANE_HEIGHT = -100f
@@ -81,17 +78,6 @@ object Constants {
     // Chase cam move speed constant
     const val CAMERA_MOVE_SPEED = 220
 
-    // Constant for ENEMY_MOVEMENT_SPEED.
-    const val ENEMY_MOVEMENT_SPEED = 10
-
-    // ENEMY_BOB_AMPLITUDE constant.
-    const val ENEMY_BOB_AMPLITUDE = 2f
-
-    // ENEMY_BOB_PERIOD constant.
-    const val ENEMY_BOB_PERIOD = 2.0f
-
-    // Constant for enemy collision radius (15 is about right)
-    const val ENEMY_COLLISION_RADIUS = 15f
 
     enum class Facing {
         LEFT, RIGHT
