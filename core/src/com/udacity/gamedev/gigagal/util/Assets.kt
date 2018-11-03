@@ -127,7 +127,7 @@ object Assets : Disposable, AssetErrorListener {
             explosionFrames.add(atlas.findRegion(EXPLOSION_SMALL))
             explosionFrames.add(atlas.findRegion(EXPLOSION_MEDIUM))
             explosionFrames.add(atlas.findRegion(EXPLOSION_LARGE))
-            Animation(EXPLOSION_DURATION, explosionFrames, Animation.PlayMode.NORMAL)
+            Animation(EXPLOSION_DURATION, explosionFrames, Animation.PlayMode.LOOP)
         }
 
         val explosionAnimation = prepareExplosionAnimation(atlas)

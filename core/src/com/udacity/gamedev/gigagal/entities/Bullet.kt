@@ -38,6 +38,8 @@ class Bullet(private val position: Vector2 = Vector2(),
                             enemy.position.x + ENEMY_COLLISION_RADIUS,
                             enemy.position.y + ENEMY_COLLISION_RADIUS
                     )) < (ENEMY_COLLISION_RADIUS)) {
+                // Spawn an explosion
+                level.spawnExplosion(position)
                 isActive = false
                 enemy.healthCounter--
             }

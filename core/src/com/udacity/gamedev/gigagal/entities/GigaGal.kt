@@ -14,6 +14,7 @@ import com.udacity.gamedev.gigagal.util.Assets.gigaGalAssets
 import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Constants.BULLET_DELAY
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_COLLISION_RADIUS
+import com.udacity.gamedev.gigagal.util.Constants.ENEMY_HEALTH
 import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
 import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
@@ -29,6 +30,7 @@ import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
+import com.udacity.gamedev.gigagal.util.Utils
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 import com.udacity.gamedev.gigagal.util.Utils.Companion.timeSinceInSec
 import ktx.log.info
@@ -67,6 +69,8 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                 jumpState = GROUNDED
                 position.set(Vector2(GIGAGAL_SPAWN_POSITION))
                 velocity.set(0f, 0f)
+                // Update health to all enemies
+                for (enemy in level.enemies) enemy.healthCounter = ENEMY_HEALTH
             }
 
             // For each platform, call landedOnPlatform()
@@ -234,15 +238,13 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                 when (facing) {
                     LEFT -> {
                         // Calculate how long we've been walking in seconds
-                        val walkTimeSeconds = MathUtils.nanoToSec *
-                                (TimeUtils.nanoTime() - walkStartTime)
+                        val walkTimeSeconds = timeSinceInSec(walkStartTime)
                         // Select the correct frame from the walking right animation
                         gigaGalAssets.walkingLeftAnimation.getKeyFrame(walkTimeSeconds)
                     }
                     RIGHT -> {
                         // Calculate how long we've been walking in seconds
-                        val walkTimeSeconds = MathUtils.nanoToSec *
-                                (TimeUtils.nanoTime() - walkStartTime)
+                        val walkTimeSeconds = timeSinceInSec(walkStartTime)
                         // Select the correct frame from the walking right animation
                         gigaGalAssets.walkingRightAnimation.getKeyFrame(walkTimeSeconds)
                     }

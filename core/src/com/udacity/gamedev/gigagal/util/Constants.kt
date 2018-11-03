@@ -69,7 +69,7 @@ object Constants {
     const val EXPLOSION_MEDIUM = "explosion-medium"
     const val EXPLOSION_SMALL = "explosion-small"
     val EXPLOSION_CENTER = Vector2(8f, 8f)
-    const val EXPLOSION_DURATION = 0.5f
+    const val EXPLOSION_DURATION = 0.2f
 
     // Powerups
     const val POWERUP_SPRITE = "powerup"
