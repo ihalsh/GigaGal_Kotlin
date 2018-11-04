@@ -49,6 +49,7 @@ object Constants {
     const val JUMP_SPEED = 250f
     const val MAX_JUMP_DURATION = 0.15
     const val GRAVITY = 1000
+    const val INITIAL_AMMO = 10
 
     // ENEMY
     const val ENEMY_MOVEMENT_SPEED = 10
@@ -74,6 +75,7 @@ object Constants {
     // Powerups
     const val POWERUP_SPRITE = "powerup"
     val POWERUP_CENTER = Vector2(7f, 5f)
+    const val POWERUP_AMMO = 10
 
     // Height of the kill plane.
     const val KILL_PLANE_HEIGHT = -100f

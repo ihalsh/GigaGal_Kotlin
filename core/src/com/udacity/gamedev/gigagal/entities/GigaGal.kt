@@ -21,16 +21,18 @@ import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_POSITION
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_SPAWN_POSITION
 import com.udacity.gamedev.gigagal.util.Constants.GRAVITY
+import com.udacity.gamedev.gigagal.util.Constants.INITIAL_AMMO
 import com.udacity.gamedev.gigagal.util.Constants.JUMP_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.JumpState.*
 import com.udacity.gamedev.gigagal.util.Constants.KILL_PLANE_HEIGHT
 import com.udacity.gamedev.gigagal.util.Constants.KNOCKBACK_VELOCITY
 import com.udacity.gamedev.gigagal.util.Constants.MAX_JUMP_DURATION
 import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
+import com.udacity.gamedev.gigagal.util.Constants.POWERUP_AMMO
+import com.udacity.gamedev.gigagal.util.Constants.POWERUP_CENTER
 import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
-import com.udacity.gamedev.gigagal.util.Utils
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 import com.udacity.gamedev.gigagal.util.Utils.Companion.timeSinceInSec
 import ktx.log.info
@@ -43,11 +45,9 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
               private var jumpStartTime: Long = 0,
               private var walkStartTime: Long = 0,
               private var walkState: Constants.WalkState = STANDING,
-              private val level: Level) {
-
-    lateinit var gigaGalBounds: Rectangle
-    lateinit var enemyBounds: Rectangle
-    private var shootTime: Long = TimeUtils.nanoTime()
+              private var ammoCount: Int = INITIAL_AMMO,
+              private val level: Level,
+              private var shootTime: Long = TimeUtils.nanoTime()) {
 
     fun update(delta: Float, platforms: Array<Platform>) {
         // Update lastFramePosition
@@ -86,14 +86,14 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
         // Collide with enemies
 
         // Define GigaGal bounding rectangle
-        gigaGalBounds = Rectangle(position.x - STANCE_WIDTH / 2,
+        val gigaGalBounds = Rectangle(position.x - STANCE_WIDTH / 2,
                 position.y - GIGAGAL_EYE_HEIGHT,
                 STANCE_WIDTH,
                 GIGAGAL_EYE_HEIGHT)
 
         for (enemy in level.enemies) {
             // Define enemy bounding rectangle
-            enemyBounds = Rectangle(
+            val enemyBounds = Rectangle(
                     enemy.position.x,
                     enemy.position.y + ENEMY_COLLISION_RADIUS / 2,
                     2 * ENEMY_COLLISION_RADIUS,
@@ -126,11 +126,35 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
             else -> walkState = STANDING
         }
 
-        // Fire! /*&& TimeUtils.timeSinceMillis(shootTime) > 500)*/
+        // Check if GigaGal should pick up a powerup
+        for (powerup in level.powerups) {
+            // Define powerup bounding rectangle
+            val powerupBounds = Rectangle(
+                    powerup.position.x,
+                    powerup.position.y,
+                    POWERUP_CENTER.x * 2,
+                    POWERUP_CENTER.y * 2)
+            // If GigaGal overlaps a powerup, remove powerup and add ammo
+            when {
+                gigaGalBounds.overlaps(powerupBounds) ->
+                    with(level.powerups) {
+                        begin()
+                        removeValue(powerup, true)
+                        end()
+                        ammoCount += POWERUP_AMMO
+                        info { "$ammoCount bullets left" }
+                    }
+            }
+        }
+
+        // Fire!
         if (input.isKeyPressed(Keys.X) &&
-                timeSinceInSec(shootTime) > BULLET_DELAY) {
+                timeSinceInSec(shootTime) > BULLET_DELAY &&
+                ammoCount > 0) {
             shootTime = TimeUtils.nanoTime()
             level.spawnBullet(position, facing, level)
+            ammoCount--
+            info { "$ammoCount bullets left" }
         }
     }
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.udacity.gamedev.gigagal.entities.*
 import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_COLLISION_RADIUS
+import com.udacity.gamedev.gigagal.util.Constants.POWERUP_CENTER
 import com.udacity.gamedev.gigagal.util.Utils
 import ktx.graphics.use
 import kotlin.text.Typography.bullet
@@ -17,6 +18,7 @@ class Level(private val platforms: Array<Platform> = Array(),
             val enemies: DelayedRemovalArray<Enemy> = DelayedRemovalArray(),
             private val bullets: DelayedRemovalArray<Bullet> = DelayedRemovalArray(),
             private val explosions: DelayedRemovalArray<Explosion> = DelayedRemovalArray(),
+            val powerups: DelayedRemovalArray<Powerup> = DelayedRemovalArray(),
             val viewport: Viewport) {
 
     val gigaGal: GigaGal = GigaGal(level = this)
@@ -25,7 +27,8 @@ class Level(private val platforms: Array<Platform> = Array(),
 
         // Add a test platforms
         platforms.add(Platform(10f, 60f, 50f, 20f))
-        platforms.add(Platform(20f, 120f, 60f, 20f))
+        val powerupPlatform = Platform(20f, 120f, 60f, 20f)
+        platforms.add(powerupPlatform)
         platforms.add(Platform(70f, 30f, 20f, 20f))
         val enemyPlatform = Platform(80f, 60f, 70f, 30f)
         platforms.add(enemyPlatform)
@@ -41,6 +44,12 @@ class Level(private val platforms: Array<Platform> = Array(),
 
         // Add an enemy sitting on enemyPlatform
         enemies.add(Enemy(enemyPlatform))
+
+        // Add powerups
+        powerups.add(Powerup(Vector2(
+                powerupPlatform.left + powerupPlatform.width / 2 - POWERUP_CENTER.x,
+                powerupPlatform.top + POWERUP_CENTER.y
+        )))
     }
 
     fun update(delta: Float) {
@@ -91,6 +100,9 @@ class Level(private val platforms: Array<Platform> = Array(),
 
         // Render the enemies
         for (enemy in enemies) batch.use { enemy.render(it) }
+
+        // Render powerups
+        for (powerup in powerups) batch.use { powerup.render(it) }
 
         // Render the bullets
         for (bullet in bullets) batch.use { bullet.render(it) }
