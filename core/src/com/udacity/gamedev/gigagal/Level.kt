@@ -14,7 +14,7 @@ import com.udacity.gamedev.gigagal.util.Utils
 import ktx.graphics.use
 import kotlin.text.Typography.bullet
 
-class Level(private val platforms: Array<Platform> = Array(),
+class Level(val platforms: Array<Platform> = Array(),
             val enemies: DelayedRemovalArray<Enemy> = DelayedRemovalArray(),
             private val bullets: DelayedRemovalArray<Bullet> = DelayedRemovalArray(),
             private val explosions: DelayedRemovalArray<Explosion> = DelayedRemovalArray(),

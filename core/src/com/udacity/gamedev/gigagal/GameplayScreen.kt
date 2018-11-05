@@ -16,7 +16,7 @@ import ktx.log.logger
 class GameplayScreen(
         private val spriteBatch: SpriteBatch = SpriteBatch(),
         private val viewport: ExtendViewport = ExtendViewport(WORLD_SIZE, WORLD_SIZE),
-        private val level: Level = LevelLoader.load("Level 1", viewport),
+        private val level: Level = LevelLoader.load("Level1", viewport),
         private val chaseCam: ChaseCam = ChaseCam(viewport.camera, level.gigaGal)) : KtxScreen {
 
     override fun render(delta: Float) {
