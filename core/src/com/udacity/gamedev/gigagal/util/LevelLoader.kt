@@ -1,21 +1,27 @@
 package com.udacity.gamedev.gigagal.util
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.udacity.gamedev.gigagal.Level
 import com.udacity.gamedev.gigagal.entities.Enemy
 import com.udacity.gamedev.gigagal.entities.Platform
+import com.udacity.gamedev.gigagal.entities.Powerup
+import com.udacity.gamedev.gigagal.util.Constants.EXIT_PORTAL_SPRITE_1
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_9PATCHES
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_COMPOSITE
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_ENEMY_TAG
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_ERROR_MESSAGE
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_HEIGHT_KEY
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_IDENTIFIER_KEY
+import com.udacity.gamedev.gigagal.util.Constants.LEVEL_IMAGENAME_KEY
+import com.udacity.gamedev.gigagal.util.Constants.LEVEL_IMAGES
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_WIDTH_KEY
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_X_KEY
 import com.udacity.gamedev.gigagal.util.Constants.LEVEL_Y_KEY
-import ktx.log.info
+import com.udacity.gamedev.gigagal.util.Constants.POWERUP_SPRITE
+import com.udacity.gamedev.gigagal.util.Constants.STANDING_RIGHT
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
@@ -46,7 +52,11 @@ object LevelLoader {
             // JSONArray behind the LEVEL_9PATCHES key
             val jsonPlatformArray = composite[LEVEL_9PATCHES] as JSONArray
 
+            // JSONArray behind the LEVEL_IMAGES key
+            val jsonLevelImagesArray = composite[LEVEL_IMAGES] as JSONArray
+
             loadPlatforms(jsonPlatformArray, level)
+            loadOther(jsonLevelImagesArray, level)
 
 
         } catch (ex: Exception) {
@@ -63,13 +73,16 @@ object LevelLoader {
         for (jsonObject in array) {
 
             val platformObject = jsonObject as JSONObject
-            val x = (platformObject[LEVEL_X_KEY] as Number? ?: 0).toFloat()
-            val y = (platformObject[LEVEL_Y_KEY] as Number? ?: 0).toFloat()
             val width = (platformObject[LEVEL_WIDTH_KEY] as Number).toFloat()
             val height = (platformObject[LEVEL_HEIGHT_KEY] as Number).toFloat()
 
             // Make a new platform with the dimensions we loaded
-            val platform = Platform(x, y, width, height)
+            val platform = Platform(
+                    getJsonObjectPosition(jsonObject).x,
+                    getJsonObjectPosition(jsonObject).y,
+                    width,
+                    height
+            )
 
             // Add the platform to the platformArray
             platformArray.add(platform)
@@ -87,6 +100,30 @@ object LevelLoader {
 
         // Add all the platforms from platformArray to the level
         level.platforms.addAll(platformArray)
-
     }
+
+    private fun loadOther(jsonLevelImagesArray: JSONArray, level: Level) {
+
+        for (arrayObject in jsonLevelImagesArray) {
+            val jsonObject = arrayObject as JSONObject
+
+            //Adds powerups
+            if (jsonObject[LEVEL_IMAGENAME_KEY] == POWERUP_SPRITE) {
+                level.powerups.add(Powerup(getJsonObjectPosition(jsonObject)))
+            }
+            //Set exit portal position
+            if (jsonObject[LEVEL_IMAGENAME_KEY] == EXIT_PORTAL_SPRITE_1) {
+                level.exitPortal.position.set(getJsonObjectPosition(jsonObject))
+            }
+
+            //Set GigaGal's position
+            if (jsonObject[LEVEL_IMAGENAME_KEY] == STANDING_RIGHT) {
+                level.gigaGal.position.set(getJsonObjectPosition(jsonObject))
+            }
+        }
+    }
+
+    private fun getJsonObjectPosition(jsonObject: JSONObject): Vector2 =
+            Vector2((jsonObject[LEVEL_X_KEY] as Number? ?: 0).toFloat(),
+                    (jsonObject[LEVEL_Y_KEY] as Number? ?: 0).toFloat())
 }

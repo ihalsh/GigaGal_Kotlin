@@ -19,7 +19,7 @@ class Level(val platforms: Array<Platform> = Array(),
             private val bullets: DelayedRemovalArray<Bullet> = DelayedRemovalArray(),
             private val explosions: DelayedRemovalArray<Explosion> = DelayedRemovalArray(),
             val powerups: DelayedRemovalArray<Powerup> = DelayedRemovalArray(),
-            private val exitPortal: ExitPortal = ExitPortal(),
+            val exitPortal: ExitPortal = ExitPortal(),
             val viewport: Viewport) {
 
     val gigaGal: GigaGal = GigaGal(level = this)

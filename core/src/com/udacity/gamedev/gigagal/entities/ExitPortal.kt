@@ -9,7 +9,7 @@ import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
 import com.udacity.gamedev.gigagal.util.Utils.Companion.timeSinceInSec
 
-class ExitPortal(private val position: Vector2 = Constants.EXIT_PORTAL_LOCATION,
+class ExitPortal(val position: Vector2 = Constants.EXIT_PORTAL_LOCATION,
                  private val startTime: Long = TimeUtils.nanoTime()) {
 
     fun render(batch: SpriteBatch) {

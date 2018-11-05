@@ -42,7 +42,7 @@ object Constants {
     const val STANCE_WIDTH = 21f
     const val WALK_LOOP_DURATION = 0.25f
     val GIGAGAL_EYE_POSITION = Vector2(16f, 24f)
-    val GIGAGAL_SPAWN_POSITION = Vector2(30f, 200f)
+    val GIGAGAL_SPAWN_POSITION = Vector2(16f, 177f)
     const val GIGAGAL_EYE_HEIGHT = 16f
     val MOVEMENT_SPEED = Vector2(100f, 0f)
     val KNOCKBACK_VELOCITY = Vector2(200f, 200f)
