@@ -23,34 +23,34 @@ class Level(private val platforms: Array<Platform> = Array(),
 
     val gigaGal: GigaGal = GigaGal(level = this)
 
-    init {
-
-        // Add a test platforms
-        platforms.add(Platform(10f, 60f, 50f, 20f))
-        val powerupPlatform = Platform(20f, 120f, 60f, 20f)
-        platforms.add(powerupPlatform)
-        platforms.add(Platform(70f, 30f, 20f, 20f))
-        val enemyPlatform = Platform(80f, 60f, 70f, 30f)
-        platforms.add(enemyPlatform)
-        platforms.add(Platform(150f, 60f, 50f, 20f))
-        platforms.add(Platform(210f, 90f, 40f, 9f))
-        platforms.add(Platform(260f, 140f, 40f, 9f))
-        platforms.add(Platform(310f, 190f, 40f, 9f))
-        platforms.add(Platform(360f, 140f, 40f, 9f))
-        platforms.add(Platform(410f, 190f, 40f, 9f))
-        platforms.add(Platform(460f, 140f, 40f, 9f))
-        platforms.add(Platform(510f, 90f, 40f, 9f))
-        platforms.add(Platform(560f, 60f, 50f, 20f))
-
-        // Add an enemy sitting on enemyPlatform
-        enemies.add(Enemy(enemyPlatform))
-
-        // Add powerups
-        powerups.add(Powerup(Vector2(
-                powerupPlatform.left + powerupPlatform.width / 2 - POWERUP_CENTER.x,
-                powerupPlatform.top + POWERUP_CENTER.y
-        )))
-    }
+//    init {
+//
+//        // Add a test platforms
+//        platforms.add(Platform(10f, 60f, 50f, 20f))
+//        val powerupPlatform = Platform(20f, 120f, 60f, 20f)
+//        platforms.add(powerupPlatform)
+//        platforms.add(Platform(70f, 30f, 20f, 20f))
+//        val enemyPlatform = Platform(80f, 60f, 70f, 30f)
+//        platforms.add(enemyPlatform)
+//        platforms.add(Platform(150f, 60f, 50f, 20f))
+//        platforms.add(Platform(210f, 90f, 40f, 9f))
+//        platforms.add(Platform(260f, 140f, 40f, 9f))
+//        platforms.add(Platform(310f, 190f, 40f, 9f))
+//        platforms.add(Platform(360f, 140f, 40f, 9f))
+//        platforms.add(Platform(410f, 190f, 40f, 9f))
+//        platforms.add(Platform(460f, 140f, 40f, 9f))
+//        platforms.add(Platform(510f, 90f, 40f, 9f))
+//        platforms.add(Platform(560f, 60f, 50f, 20f))
+//
+//        // Add an enemy sitting on enemyPlatform
+//        enemies.add(Enemy(enemyPlatform))
+//
+//        // Add powerups
+//        powerups.add(Powerup(Vector2(
+//                powerupPlatform.left + powerupPlatform.width / 2 - POWERUP_CENTER.x,
+//                powerupPlatform.top + POWERUP_CENTER.y
+//        )))
+//    }
 
     fun update(delta: Float) {
         // Update GigaGal

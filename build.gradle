@@ -115,6 +115,12 @@ project(":core") {
         implementation "io.github.libktx:ktx-graphics:$KTXVersion"
         implementation "io.github.libktx:ktx-assets:$KTXVersion"
         implementation "io.github.libktx:ktx-log:$KTXVersion"
+
+        // Added a dependency on the JSON simple library
+        // We also had to do some shenanigans to prevent a version conflict
+        implementation ('com.googlecode.json-simple:json-simple:1.1.1') {
+            exclude module: 'junit'
+        }
     }
 
     // Define packTextures task
@@ -129,8 +135,16 @@ project(":core") {
         }
     }
 
-    // Add task dependency between compileJava and packTextures
+    // Task to copy the levels from the Overlap2D project to the assets directory
+    task copyLevels(type: Copy){
+        from "../GigaGalLevels/scenes"
+        into "../android/assets/levels"
+        exclude "MainScene.dt"
+    }
+
+    // Add task dependencies
     project.tasks.compileJava.dependsOn packTextures
+    project.tasks.compileJava.dependsOn copyLevels
 }
 
 tasks.eclipse.doLast {

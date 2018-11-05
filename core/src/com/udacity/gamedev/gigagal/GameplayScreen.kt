@@ -8,6 +8,7 @@ import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.ChaseCam
 import com.udacity.gamedev.gigagal.util.Constants.BACKGROUND_COLOR
 import com.udacity.gamedev.gigagal.util.Constants.WORLD_SIZE
+import com.udacity.gamedev.gigagal.util.LevelLoader
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.log.logger
@@ -15,7 +16,7 @@ import ktx.log.logger
 class GameplayScreen(
         private val spriteBatch: SpriteBatch = SpriteBatch(),
         private val viewport: ExtendViewport = ExtendViewport(WORLD_SIZE, WORLD_SIZE),
-        private val level: Level = Level(viewport = viewport),
+        private val level: Level = LevelLoader.load("Level 1", viewport),
         private val chaseCam: ChaseCam = ChaseCam(viewport.camera, level.gigaGal)) : KtxScreen {
 
     override fun render(delta: Float) {

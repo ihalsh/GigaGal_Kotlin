@@ -83,6 +83,20 @@ object Constants {
     // Chase cam move speed constant
     const val CAMERA_MOVE_SPEED = 220
 
+    // Level Loading
+    const val LEVEL_DIR = "levels"
+    const val LEVEL_FILE_EXTENSION = "dt"
+    const val LEVEL_COMPOSITE = "composite"
+    const val LEVEL_9PATCHES = "sImage9patchs"
+    const val LEVEL_IMAGES = "sImages"
+    const val LEVEL_ERROR_MESSAGE = "There was a problem loading the level."
+    const val LEVEL_IMAGENAME_KEY = "imageName"
+    const val LEVEL_X_KEY = "x"
+    const val LEVEL_Y_KEY = "y"
+    const val LEVEL_WIDTH_KEY = "width"
+    const val LEVEL_HEIGHT_KEY = "height"
+    const val LEVEL_IDENTIFIER_KEY = "itemIdentifier"
+    const val LEVEL_ENEMY_TAG = "Enemy"
 
     enum class Facing {
         LEFT, RIGHT
