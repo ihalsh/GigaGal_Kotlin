@@ -22,6 +22,7 @@ import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_EYE_POSITION
 import com.udacity.gamedev.gigagal.util.Constants.GIGAGAL_SPAWN_POSITION
 import com.udacity.gamedev.gigagal.util.Constants.GRAVITY
 import com.udacity.gamedev.gigagal.util.Constants.INITIAL_AMMO
+import com.udacity.gamedev.gigagal.util.Constants.INITIAL_LIVES
 import com.udacity.gamedev.gigagal.util.Constants.JUMP_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.JumpState.*
 import com.udacity.gamedev.gigagal.util.Constants.KILL_PLANE_HEIGHT
@@ -30,6 +31,7 @@ import com.udacity.gamedev.gigagal.util.Constants.MAX_JUMP_DURATION
 import com.udacity.gamedev.gigagal.util.Constants.MOVEMENT_SPEED
 import com.udacity.gamedev.gigagal.util.Constants.POWERUP_AMMO
 import com.udacity.gamedev.gigagal.util.Constants.POWERUP_CENTER
+import com.udacity.gamedev.gigagal.util.Constants.POWERUP_SCORE
 import com.udacity.gamedev.gigagal.util.Constants.STANCE_WIDTH
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.STANDING
 import com.udacity.gamedev.gigagal.util.Constants.WalkState.WALKING
@@ -45,7 +47,8 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
               private var jumpStartTime: Long = 0,
               private var walkStartTime: Long = 0,
               private var walkState: Constants.WalkState = STANDING,
-              private var ammoCount: Int = INITIAL_AMMO,
+              var ammoCount: Int = INITIAL_AMMO,
+              var lives: Int = INITIAL_LIVES,
               private val level: Level,
               private var shootTime: Long = TimeUtils.nanoTime()) {
 
@@ -71,6 +74,9 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                 velocity.set(0f, 0f)
                 // Update health to all enemies
                 for (enemy in level.enemies) enemy.healthCounter = ENEMY_HEALTH
+                //Decrease GigaGal's lives
+                lives--
+                info { "Lives left: $lives" }
             }
 
             // For each platform, call landedOnPlatform()
@@ -142,6 +148,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                         removeValue(powerup, true)
                         end()
                         ammoCount += POWERUP_AMMO
+                        level.score += POWERUP_SCORE
                         info { "$ammoCount bullets left" }
                     }
             }

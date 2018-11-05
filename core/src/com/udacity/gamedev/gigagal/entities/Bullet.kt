@@ -6,6 +6,7 @@ import com.udacity.gamedev.gigagal.Level
 import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_COLLISION_RADIUS
+import com.udacity.gamedev.gigagal.util.Constants.ENEMY_HIT_SCORE
 import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
 import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
@@ -38,6 +39,9 @@ class Bullet(private val position: Vector2 = Vector2(),
                             enemy.position.x + ENEMY_COLLISION_RADIUS,
                             enemy.position.y + ENEMY_COLLISION_RADIUS
                     )) < (ENEMY_COLLISION_RADIUS)) {
+                // Add the ENEMY_HIT_SCORE to the level.score
+                level.score += ENEMY_HIT_SCORE
+
                 // Spawn an explosion
                 level.spawnExplosion(position)
                 isActive = false

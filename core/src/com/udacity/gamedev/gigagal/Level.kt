@@ -11,6 +11,7 @@ import com.udacity.gamedev.gigagal.overlays.GigaGalHud
 import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_COLLISION_RADIUS
+import com.udacity.gamedev.gigagal.util.Constants.ENEMY_KILL_SCORE
 import com.udacity.gamedev.gigagal.util.Constants.POWERUP_CENTER
 import com.udacity.gamedev.gigagal.util.Utils
 import ktx.graphics.use
@@ -22,6 +23,7 @@ class Level(val platforms: Array<Platform> = Array(),
             private val explosions: DelayedRemovalArray<Explosion> = DelayedRemovalArray(),
             val powerups: DelayedRemovalArray<Powerup> = DelayedRemovalArray(),
             val exitPortal: ExitPortal = ExitPortal(),
+            var score:Int = 0,
             val viewport: Viewport) {
 
     val gigaGal: GigaGal = GigaGal(level = this)
@@ -37,6 +39,8 @@ class Level(val platforms: Array<Platform> = Array(),
                 update(delta)
                 if (healthCounter <1 ) {
                     enemies.removeValue(this, true)
+                    // Add the ENEMY_KILL_SCORE to the score
+                    score += ENEMY_KILL_SCORE
                     explosions.add(Explosion(position.add(
                             ENEMY_COLLISION_RADIUS,
                             ENEMY_COLLISION_RADIUS

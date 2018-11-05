@@ -33,7 +33,10 @@ class GameplayScreen(
         level.render(spriteBatch)
 
         // Render the HUD
-        hud.render(spriteBatch)
+        hud.render(spriteBatch,
+                lives = level.gigaGal.lives,
+                score = level.score,
+                ammo = level.gigaGal.ammoCount)
     }
 
     override fun resize(width: Int, height: Int) {

@@ -21,8 +21,16 @@ object Constants {
 
     const val TEXTURE_ATLAS = "images/gigagal.pack.atlas"
 
+    // Scoring
+    val ENEMY_KILL_SCORE = 100
+    val ENEMY_HIT_SCORE = 25
+    val POWERUP_SCORE = 50
+
     // HUD
-    const val HUD_VIEWPORT_SIZE = 480f
+    val HUD_VIEWPORT_SIZE = 480f
+    val HUD_MARGIN = 20f
+    val HUD_AMMO_LABEL = "Ammo: "
+    val HUD_SCORE_LABEL = "Score: "
 
     // A constants for the names of sprites
     const val STANDING_LEFT = "standing-left"
@@ -53,6 +61,7 @@ object Constants {
     const val MAX_JUMP_DURATION = 0.15
     const val GRAVITY = 1000
     const val INITIAL_AMMO = 10
+    const val INITIAL_LIVES = 3
 
     // ENEMY
     const val ENEMY_MOVEMENT_SPEED = 10
@@ -109,9 +118,7 @@ object Constants {
     const val EXIT_PORTAL_SPRITE_5 = "exit-portal-5"
     const val EXIT_PORTAL_SPRITE_6 = "exit-portal-6"
     val EXIT_PORTAL_CENTER = Vector2(31f, 31f)
-
     const val EXIT_PORTAL_FRAME_DURATION = .1f
-
     val EXIT_PORTAL_LOCATION = Vector2(200f, 200f)
 
     enum class Facing {
