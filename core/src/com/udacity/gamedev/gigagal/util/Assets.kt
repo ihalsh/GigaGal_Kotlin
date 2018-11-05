@@ -10,6 +10,13 @@ import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
 import com.udacity.gamedev.gigagal.util.Constants.BULLET_SPRITE
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_SPRITE
+import com.udacity.gamedev.gigagal.util.Constants.EXIT_PORTAL_FRAME_DURATION
+import com.udacity.gamedev.gigagal.util.Constants.EXIT_PORTAL_SPRITE_1
+import com.udacity.gamedev.gigagal.util.Constants.EXIT_PORTAL_SPRITE_2
+import com.udacity.gamedev.gigagal.util.Constants.EXIT_PORTAL_SPRITE_3
+import com.udacity.gamedev.gigagal.util.Constants.EXIT_PORTAL_SPRITE_4
+import com.udacity.gamedev.gigagal.util.Constants.EXIT_PORTAL_SPRITE_5
+import com.udacity.gamedev.gigagal.util.Constants.EXIT_PORTAL_SPRITE_6
 import com.udacity.gamedev.gigagal.util.Constants.EXPLOSION_DURATION
 import com.udacity.gamedev.gigagal.util.Constants.EXPLOSION_LARGE
 import com.udacity.gamedev.gigagal.util.Constants.EXPLOSION_MEDIUM
@@ -48,6 +55,7 @@ object Assets : Disposable, AssetErrorListener {
     var bulletAssets: BulletAssets
     var explosionAssets: ExplosionAssets
     var powerupAssets: PowerupAssets
+    var exitPortalAssets: ExitPortalAssets
 
     init {
         with(assetManager) {
@@ -61,6 +69,7 @@ object Assets : Disposable, AssetErrorListener {
             bulletAssets = BulletAssets(atlas)
             explosionAssets = ExplosionAssets(atlas)
             powerupAssets = PowerupAssets(atlas)
+            exitPortalAssets = ExitPortalAssets(atlas)
         }
         logger { "Assets loading... Ok" }
     }
@@ -131,6 +140,26 @@ object Assets : Disposable, AssetErrorListener {
         }
 
         val explosionAnimation = prepareExplosionAnimation(atlas)
+    }
+
+    class ExitPortalAssets(atlas: TextureAtlas) {
+
+        private val preparePortalAnimation = { atlas: TextureAtlas ->
+            val portalFrames = Array<TextureAtlas.AtlasRegion>()
+            portalFrames.add(atlas.findRegion(EXIT_PORTAL_SPRITE_1))
+            portalFrames.add(atlas.findRegion(EXIT_PORTAL_SPRITE_2))
+            portalFrames.add(atlas.findRegion(EXIT_PORTAL_SPRITE_3))
+            portalFrames.add(atlas.findRegion(EXIT_PORTAL_SPRITE_4))
+            portalFrames.add(atlas.findRegion(EXIT_PORTAL_SPRITE_5))
+            portalFrames.add(atlas.findRegion(EXIT_PORTAL_SPRITE_6))
+            Animation(
+                    EXIT_PORTAL_FRAME_DURATION,
+                    portalFrames,
+                    Animation.PlayMode.LOOP
+            )
+        }
+
+        val portalAnimation = preparePortalAnimation(atlas)
     }
 }
 

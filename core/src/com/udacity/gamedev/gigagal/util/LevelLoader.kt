@@ -74,9 +74,6 @@ object LevelLoader {
             // Add the platform to the platformArray
             platformArray.add(platform)
 
-            // log the location and dimensions of the platform
-            info { "Platform added: $x, $y, width=$width, height=$height" }
-
             // Get the platform identifier
             val identifier = platformObject[LEVEL_IDENTIFIER_KEY] as String?
 
@@ -86,7 +83,7 @@ object LevelLoader {
 
         // Sort the platform array by descending position of the top of the platform
         // We're doing this so lower platforms aren't hidden by higher platforms
-        platformArray.sort { o1, o2 -> o2.top.compareTo(o1.top) }
+        platformArray.sort { platform1, platform2 -> platform2.top.compareTo(platform1.top) }
 
         // Add all the platforms from platformArray to the level
         level.platforms.addAll(platformArray)

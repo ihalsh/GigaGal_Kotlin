@@ -98,10 +98,22 @@ object Constants {
     const val LEVEL_IDENTIFIER_KEY = "itemIdentifier"
     const val LEVEL_ENEMY_TAG = "Enemy"
 
+    // Exit Portal
+    const val EXIT_PORTAL_SPRITE_1 = "exit-portal-1"
+    const val EXIT_PORTAL_SPRITE_2 = "exit-portal-2"
+    const val EXIT_PORTAL_SPRITE_3 = "exit-portal-3"
+    const val EXIT_PORTAL_SPRITE_4 = "exit-portal-4"
+    const val EXIT_PORTAL_SPRITE_5 = "exit-portal-5"
+    const val EXIT_PORTAL_SPRITE_6 = "exit-portal-6"
+    val EXIT_PORTAL_CENTER = Vector2(31f, 31f)
+
+    const val EXIT_PORTAL_FRAME_DURATION = .1f
+
+    val EXIT_PORTAL_LOCATION = Vector2(200f, 200f)
+
     enum class Facing {
         LEFT, RIGHT
     }
-
     enum class JumpState {
         JUMPING, FALLING, GROUNDED, RECOILING
     }
