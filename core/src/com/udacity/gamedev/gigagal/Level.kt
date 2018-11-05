@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.DelayedRemovalArray
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.udacity.gamedev.gigagal.entities.*
+import com.udacity.gamedev.gigagal.overlays.GigaGalHud
+import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.Constants
 import com.udacity.gamedev.gigagal.util.Constants.ENEMY_COLLISION_RADIUS
 import com.udacity.gamedev.gigagal.util.Constants.POWERUP_CENTER
@@ -84,6 +86,7 @@ class Level(val platforms: Array<Platform> = Array(),
 
         // Render the exit portal
         batch.use { exitPortal.render(it) }
+
     }
 
     fun spawnBullet(position: Vector2, direction: Constants.Facing, level: Level) {

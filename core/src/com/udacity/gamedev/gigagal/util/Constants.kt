@@ -17,9 +17,12 @@ object Constants {
      * of an ExtendViewport, and we'll run the game in landscape mode, so this will really end up
      * specifying the height of the world. We recommend 128.
      */
-    const val WORLD_SIZE = 192f
+    const val WORLD_SIZE = 208f
 
     const val TEXTURE_ATLAS = "images/gigagal.pack.atlas"
+
+    // HUD
+    const val HUD_VIEWPORT_SIZE = 480f
 
     // A constants for the names of sprites
     const val STANDING_LEFT = "standing-left"

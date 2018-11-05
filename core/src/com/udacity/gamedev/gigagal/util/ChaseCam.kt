@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Camera
 import com.udacity.gamedev.gigagal.entities.GigaGal
 import com.udacity.gamedev.gigagal.util.Constants.CAMERA_MOVE_SPEED
 
-class ChaseCam(private val camera: Camera,
+class ChaseCam(var camera: Camera,
                private val target: GigaGal,
                private var following: Boolean = true) {
 

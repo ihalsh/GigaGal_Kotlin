@@ -1,9 +1,8 @@
 package com.udacity.gamedev.gigagal
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.udacity.gamedev.gigagal.overlays.GigaGalHud
 import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.ChaseCam
 import com.udacity.gamedev.gigagal.util.Constants.BACKGROUND_COLOR
@@ -17,14 +16,13 @@ class GameplayScreen(
         private val spriteBatch: SpriteBatch = SpriteBatch(),
         private val viewport: ExtendViewport = ExtendViewport(WORLD_SIZE, WORLD_SIZE),
         private val level: Level = LevelLoader.load("Level1", viewport),
-        private val chaseCam: ChaseCam = ChaseCam(viewport.camera, level.gigaGal)) : KtxScreen {
+        private val chaseCam: ChaseCam = ChaseCam(viewport.camera, level.gigaGal),
+        private val hud: GigaGalHud = GigaGalHud()) : KtxScreen {
 
     override fun render(delta: Float) {
 
         level.update(delta)
-
         chaseCam.update(delta)
-
         viewport.apply()
 
         clearScreen(BACKGROUND_COLOR.r, BACKGROUND_COLOR.g, BACKGROUND_COLOR.b)
@@ -33,11 +31,17 @@ class GameplayScreen(
         spriteBatch.projectionMatrix = viewport.camera.combined
 
         level.render(spriteBatch)
+
+        // Render the HUD
+        hud.render(spriteBatch)
     }
 
     override fun resize(width: Int, height: Int) {
-        // Update the viewport
+        // Update the viewports
         viewport.update(width, height, true)
+        level.viewport.update(width, height, true)
+        hud.viewport.update(width, height, true)
+        chaseCam.camera = level.viewport.camera
     }
 
     override fun dispose() {
