@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.udacity.gamedev.gigagal.overlays.GameOverOverlay
 import com.udacity.gamedev.gigagal.overlays.GigaGalHud
 import com.udacity.gamedev.gigagal.overlays.VictoryOverlay
 import com.udacity.gamedev.gigagal.util.Assets
@@ -25,7 +26,8 @@ class GameplayScreen(
         private var level: Level = LevelLoader.load("Level1", viewport),
         private var chaseCam: ChaseCam = ChaseCam(viewport.camera, level.gigaGal),
         private val hud: GigaGalHud = GigaGalHud(),
-        private val victoryOverlay:VictoryOverlay = VictoryOverlay()) : KtxScreen {
+        private val victoryOverlay:VictoryOverlay = VictoryOverlay(),
+        private val gameOverOverlay: GameOverOverlay = GameOverOverlay()) : KtxScreen {
 
     override fun show() {
         startNewLevel()
@@ -56,7 +58,25 @@ class GameplayScreen(
                 levelComplete()
             }
         }
+
+        // Repeat the level victory logic to display the game over screen and call levelFailed()
+        if (level.gameOver) {
+
+            if (levelEndOverlayStartTime == 0L) {
+                levelEndOverlayStartTime = TimeUtils.nanoTime()
+                gameOverOverlay.init()
+            }
+            gameOverOverlay.render(batch)
+
+            if (Utils.timeSinceInSec(levelEndOverlayStartTime) > LEVEL_END_DURATION) {
+                levelEndOverlayStartTime = 0L
+                levelFailed()
+            }
+        }
+
     }
+
+    private fun levelFailed() = startNewLevel()
 
     private fun levelComplete() = startNewLevel()
 
@@ -89,6 +109,7 @@ class GameplayScreen(
         level.viewport.update(width, height, true)
         hud.viewport.update(width, height, true)
         victoryOverlay.viewport.update(width, height, true)
+        gameOverOverlay.viewport.update(width, height, true)
         chaseCam.camera = level.viewport.camera
     }
 

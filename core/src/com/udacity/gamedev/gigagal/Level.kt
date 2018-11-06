@@ -21,13 +21,16 @@ class Level(val platforms: Array<Platform> = Array(),
             val powerups: DelayedRemovalArray<Powerup> = DelayedRemovalArray(),
             val exitPortal: ExitPortal = ExitPortal(),
             var score: Int = 0,
-            private var gameOver: Boolean = false,
+            var gameOver: Boolean = false,
             var victory: Boolean = false,
             val viewport: Viewport) {
 
     val gigaGal: GigaGal = GigaGal(level = this)
 
     fun update(delta: Float) {
+
+        // If GigaGal has less than 0 lives, set gameOver to true
+        if (gigaGal.lives < 0) gameOver = true
 
         // If GigaGal is touching the exit portal, set victory to true
         if (gigaGal.gigaGalBounds.contains(Vector2().set(

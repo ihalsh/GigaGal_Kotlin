@@ -32,7 +32,7 @@ class Explosion(private val position: Vector2,
 
     private fun yetToStart(): Boolean = Utils.timeSinceInSec(startTime) - offset < 0
     fun isFinished(): Boolean {
-        val elapsedTime = Utils.timeSinceInSec(startTime) - offset
+        val elapsedTime = timeSinceInSec(startTime) - offset
         return explosionAssets.explosionAnimation.isAnimationFinished(elapsedTime)
     }
 
