@@ -58,7 +58,7 @@ object Constants {
     val MOVEMENT_SPEED = Vector2(100f, 0f)
     val KNOCKBACK_VELOCITY = Vector2(200f, 200f)
     const val JUMP_SPEED = 250f
-    const val MAX_JUMP_DURATION = 0.15
+    const val MAX_JUMP_DURATION = 0.2
     const val GRAVITY = 1000
     const val INITIAL_AMMO = 10
     const val INITIAL_LIVES = 3

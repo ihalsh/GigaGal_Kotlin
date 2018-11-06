@@ -1,5 +1,6 @@
 package com.udacity.gamedev.gigagal.entities
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -51,7 +52,10 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
               var gigaGalBounds: Rectangle = Rectangle(),
               var lives: Int = INITIAL_LIVES,
               private val level: Level,
-              private var shootTime: Long = TimeUtils.nanoTime()) {
+              private var shootTime: Long = TimeUtils.nanoTime(),
+              var jumpButtonPressed: Boolean = false,
+              var leftButtonPressed: Boolean = false,
+              var rightButtonPressed: Boolean = false) {
 
     fun update(delta: Float, platforms: Array<Platform>) {
         // Update lastFramePosition
@@ -116,7 +120,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
         }
 
         // Jump
-        if (input.isKeyPressed(Keys.SPACE)) {
+        if (input.isKeyPressed(Keys.SPACE) || jumpButtonPressed) {
             // Handle jump key
             when (jumpState) {
                 GROUNDED -> startJump()
@@ -125,41 +129,50 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
         } else endJump()
 
         // Move left/right
-        if (jumpState != RECOILING) when {
-            input.isKeyPressed(Keys.LEFT) -> moveLeft(delta)
-            input.isKeyPressed(Keys.RIGHT) -> moveRight(delta)
-            else -> walkState = STANDING
-        }
+        if (jumpState != RECOILING) {
 
-        // Check if GigaGal should pick up a powerup
-        for (powerup in level.powerups) {
-            // Define powerup bounding rectangle
-            val powerupBounds = Rectangle(
-                    powerup.position.x,
-                    powerup.position.y,
-                    POWERUP_CENTER.x * 2,
-                    POWERUP_CENTER.y * 2)
-            // If GigaGal overlaps a powerup, remove powerup and add ammo
+            val left: Boolean = Gdx.input.isKeyPressed(Keys.LEFT) || leftButtonPressed
+            val right = Gdx.input.isKeyPressed(Keys.RIGHT) || rightButtonPressed
+
             when {
-                gigaGalBounds.overlaps(powerupBounds) ->
-                    with(level.powerups) {
-                        begin()
-                        removeValue(powerup, true)
-                        end()
-                        ammoCount += POWERUP_AMMO
-                        level.score += POWERUP_SCORE
-                    }
+                (left && !right) -> moveLeft(delta)
+                (right && !left) -> moveRight(delta)
+                else -> walkState = STANDING
+            }
+
+            // Check if GigaGal should pick up a powerup
+            for (powerup in level.powerups) {
+                // Define powerup bounding rectangle
+                val powerupBounds = Rectangle(
+                        powerup.position.x,
+                        powerup.position.y,
+                        POWERUP_CENTER.x * 2,
+                        POWERUP_CENTER.y * 2)
+                // If GigaGal overlaps a powerup, remove powerup and add ammo
+                when {
+                    gigaGalBounds.overlaps(powerupBounds) ->
+                        with(level.powerups) {
+                            begin()
+                            removeValue(powerup, true)
+                            end()
+                            ammoCount += POWERUP_AMMO
+                            level.score += POWERUP_SCORE}
+                }
             }
         }
 
-        // Fire!
+        // Shoot!
         if (input.isKeyPressed(Keys.X) &&
                 timeSinceInSec(shootTime) > BULLET_DELAY &&
                 ammoCount > 0) {
-            shootTime = TimeUtils.nanoTime()
-            level.spawnBullet(position, facing, level)
-            ammoCount--
+            shoot()
         }
+    }
+
+    fun shoot() {
+        shootTime = TimeUtils.nanoTime()
+        level.spawnBullet(position, facing, level)
+        ammoCount--
     }
 
     private fun recoilFromEnemy(direction: Constants.Facing) {

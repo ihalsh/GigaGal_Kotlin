@@ -1,5 +1,6 @@
 package com.udacity.gamedev.gigagal
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.TimeUtils
@@ -32,9 +33,15 @@ class GameplayScreen(
         private val onscreenControls: OnscreenControls = OnscreenControls(level.gigaGal)) : KtxScreen {
 
     override fun show() {
-        startNewLevel()
+        // Use Gdx.input.setInputProcessor() to send touch events to onscreenControls
+        /* if (onMobile()) */Gdx.input.inputProcessor = onscreenControls
+
         onscreenControls.init()
+        startNewLevel()
     }
+
+    private fun onMobile(): Boolean = Gdx.app.type == Application.ApplicationType.Android
+            || Gdx.app.type == Application.ApplicationType.iOS
 
     private fun startNewLevel() {
         level = LevelLoader.load("Level1", viewport)
@@ -42,6 +49,7 @@ class GameplayScreen(
 //        val levelName = Constants.LEVELS [MathUtils.random(Constants.LEVELS.length - 1)];
 //        level = LevelLoader.load(levelName)
         chaseCam = ChaseCam(viewport.camera, level.gigaGal)
+        onscreenControls.gigaGal = level.gigaGal
         resize(Gdx.graphics.width, Gdx.graphics.height)
     }
 
@@ -105,8 +113,9 @@ class GameplayScreen(
 
             renderLevelEndOverlays(this)
 
-            // Render onscreencontrols
-            onscreenControls.render(this)
+
+            // onMobile() turn off the controls when not on a mobile device
+            /*if (onMobile())*/ onscreenControls.render(this)
         }
     }
 
@@ -119,6 +128,7 @@ class GameplayScreen(
         victoryOverlay.viewport.update(width, height, true)
         gameOverOverlay.viewport.update(width, height, true)
         onscreenControls.viewport.update(width, height, true)
+        onscreenControls.init()
         chaseCam.camera = level.viewport.camera
     }
 
