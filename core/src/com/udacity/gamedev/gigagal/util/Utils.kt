@@ -11,11 +11,16 @@ import ktx.graphics.rect
 
 class Utils {
     companion object {
-        fun drawBatch(batch: SpriteBatch, region: TextureAtlas.AtlasRegion, position: Vector2) {
+        fun drawBatch(
+                batch: SpriteBatch,
+                region: TextureAtlas.AtlasRegion,
+                position: Vector2,
+                offset: Vector2 = Vector2()
+        ) {
             batch.draw(
                     region.texture,
-                    position.x,
-                    position.y,
+                    position.x - offset.x,
+                    position.y - offset.y,
                     0f,
                     0f,
                     region.regionWidth.toFloat(),

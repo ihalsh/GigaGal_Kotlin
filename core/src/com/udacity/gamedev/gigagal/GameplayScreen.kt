@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.udacity.gamedev.gigagal.overlays.GameOverOverlay
 import com.udacity.gamedev.gigagal.overlays.GigaGalHud
+import com.udacity.gamedev.gigagal.overlays.OnscreenControls
 import com.udacity.gamedev.gigagal.overlays.VictoryOverlay
 import com.udacity.gamedev.gigagal.util.Assets
 import com.udacity.gamedev.gigagal.util.ChaseCam
@@ -27,10 +28,12 @@ class GameplayScreen(
         private var chaseCam: ChaseCam = ChaseCam(viewport.camera, level.gigaGal),
         private val hud: GigaGalHud = GigaGalHud(),
         private val victoryOverlay:VictoryOverlay = VictoryOverlay(),
-        private val gameOverOverlay: GameOverOverlay = GameOverOverlay()) : KtxScreen {
+        private val gameOverOverlay: GameOverOverlay = GameOverOverlay(),
+        private val onscreenControls: OnscreenControls = OnscreenControls(level.gigaGal)) : KtxScreen {
 
     override fun show() {
         startNewLevel()
+        onscreenControls.init()
     }
 
     private fun startNewLevel() {
@@ -88,18 +91,23 @@ class GameplayScreen(
 
         clearScreen(BACKGROUND_COLOR.r, BACKGROUND_COLOR.g, BACKGROUND_COLOR.b)
 
-        // Set the SpriteBatch's projection matrix
-        spriteBatch.projectionMatrix = viewport.camera.combined
+        with(spriteBatch) {
+            // Set the SpriteBatch's projection matrix
+            projectionMatrix = viewport.camera.combined
 
-        level.render(spriteBatch)
+            level.render(this)
 
-        // Render the HUD
-        hud.render(spriteBatch,
-                lives = level.gigaGal.lives,
-                score = level.score,
-                ammo = level.gigaGal.ammoCount)
+            // Render the HUD
+            hud.render(this,
+                    lives = level.gigaGal.lives,
+                    score = level.score,
+                    ammo = level.gigaGal.ammoCount)
 
-        renderLevelEndOverlays(spriteBatch)
+            renderLevelEndOverlays(this)
+
+            // Render onscreencontrols
+            onscreenControls.render(this)
+        }
     }
 
 
@@ -110,6 +118,7 @@ class GameplayScreen(
         hud.viewport.update(width, height, true)
         victoryOverlay.viewport.update(width, height, true)
         gameOverOverlay.viewport.update(width, height, true)
+        onscreenControls.viewport.update(width, height, true)
         chaseCam.camera = level.viewport.camera
     }
 

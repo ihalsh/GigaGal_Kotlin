@@ -56,6 +56,7 @@ object Assets : Disposable, AssetErrorListener {
     var explosionAssets: ExplosionAssets
     var powerupAssets: PowerupAssets
     var exitPortalAssets: ExitPortalAssets
+    var onscreenControlsAssets: OnscreenControlsAssets
 
     init {
         with(assetManager) {
@@ -70,6 +71,7 @@ object Assets : Disposable, AssetErrorListener {
             explosionAssets = ExplosionAssets(atlas)
             powerupAssets = PowerupAssets(atlas)
             exitPortalAssets = ExitPortalAssets(atlas)
+            onscreenControlsAssets = OnscreenControlsAssets(atlas)
         }
         logger { "Assets loading... Ok" }
     }
@@ -124,10 +126,10 @@ object Assets : Disposable, AssetErrorListener {
                       val enemy: TextureAtlas.AtlasRegion = atlas.findRegion(ENEMY_SPRITE))
 
     class BulletAssets(atlas: TextureAtlas,
-                      val bullet: TextureAtlas.AtlasRegion = atlas.findRegion(BULLET_SPRITE))
+                       val bullet: TextureAtlas.AtlasRegion = atlas.findRegion(BULLET_SPRITE))
 
     class PowerupAssets(atlas: TextureAtlas,
-                       val powerup: TextureAtlas.AtlasRegion = atlas.findRegion(POWERUP_SPRITE))
+                        val powerup: TextureAtlas.AtlasRegion = atlas.findRegion(POWERUP_SPRITE))
 
     class ExplosionAssets(atlas: TextureAtlas) {
 
@@ -161,6 +163,15 @@ object Assets : Disposable, AssetErrorListener {
 
         val portalAnimation = preparePortalAnimation(atlas)
     }
+
+    class OnscreenControlsAssets(
+            atlas: TextureAtlas,
+            val moveRight: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.MOVE_RIGHT_BUTTON),
+            val shoot: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.SHOOT_BUTTON),
+            val moveLeft: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.MOVE_LEFT_BUTTON),
+            val jump: TextureAtlas.AtlasRegion = atlas.findRegion(Constants.JUMP_BUTTON))
 }
+
+
 
 
