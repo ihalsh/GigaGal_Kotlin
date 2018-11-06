@@ -48,6 +48,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
               private var walkStartTime: Long = 0,
               private var walkState: Constants.WalkState = STANDING,
               var ammoCount: Int = INITIAL_AMMO,
+              var gigaGalBounds: Rectangle = Rectangle(),
               var lives: Int = INITIAL_LIVES,
               private val level: Level,
               private var shootTime: Long = TimeUtils.nanoTime()) {
@@ -92,7 +93,7 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
         // Collide with enemies
 
         // Define GigaGal bounding rectangle
-        val gigaGalBounds = Rectangle(position.x - STANCE_WIDTH / 2,
+        gigaGalBounds = Rectangle(position.x - STANCE_WIDTH / 2,
                 position.y - GIGAGAL_EYE_HEIGHT,
                 STANCE_WIDTH,
                 GIGAGAL_EYE_HEIGHT)
@@ -107,10 +108,8 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
             // If GigaGal overlaps an enemy, log the direction from which she hit it
             when {
                 gigaGalBounds.overlaps(enemyBounds) -> if (position.x < enemy.position.x) {
-                    info { "Hit an enemy from the left" }
                     recoilFromEnemy(RIGHT)
                 } else {
-                    info { "Hit an enemy from the right" }
                     recoilFromEnemy(LEFT)
                 }
             }
@@ -149,7 +148,6 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
                         end()
                         ammoCount += POWERUP_AMMO
                         level.score += POWERUP_SCORE
-                        info { "$ammoCount bullets left" }
                     }
             }
         }
@@ -161,7 +159,6 @@ class GigaGal(val position: Vector2 = Vector2(GIGAGAL_SPAWN_POSITION),
             shootTime = TimeUtils.nanoTime()
             level.spawnBullet(position, facing, level)
             ammoCount--
-            info { "$ammoCount bullets left" }
         }
     }
 

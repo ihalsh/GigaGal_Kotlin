@@ -118,8 +118,17 @@ object Constants {
     const val EXIT_PORTAL_SPRITE_5 = "exit-portal-5"
     const val EXIT_PORTAL_SPRITE_6 = "exit-portal-6"
     val EXIT_PORTAL_CENTER = Vector2(31f, 31f)
+    val EXIT_PORTAL_RADIUS = 28f
     const val EXIT_PORTAL_FRAME_DURATION = .1f
     val EXIT_PORTAL_LOCATION = Vector2(200f, 200f)
+
+    // Victory/Game Over screens
+    val LEVEL_END_DURATION = 5f
+    val VICTORY_MESSAGE = "You are the Winrar!"
+    val GAME_OVER_MESSAGE = "Game Over, Gal"
+    val EXPLOSION_COUNT = 500
+    val ENEMY_COUNT = 200
+    val FONT_FILE = "font/header.fnt"
 
     enum class Facing {
         LEFT, RIGHT

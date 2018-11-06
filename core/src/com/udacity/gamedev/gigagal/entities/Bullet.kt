@@ -10,6 +10,7 @@ import com.udacity.gamedev.gigagal.util.Constants.ENEMY_HIT_SCORE
 import com.udacity.gamedev.gigagal.util.Constants.Facing.LEFT
 import com.udacity.gamedev.gigagal.util.Constants.Facing.RIGHT
 import com.udacity.gamedev.gigagal.util.Utils.Companion.drawBatch
+import ktx.log.info
 
 class Bullet(private val position: Vector2 = Vector2(),
              private val direction: Constants.Facing = RIGHT,
@@ -43,7 +44,7 @@ class Bullet(private val position: Vector2 = Vector2(),
                 level.score += ENEMY_HIT_SCORE
 
                 // Spawn an explosion
-                level.spawnExplosion(position)
+                level.spawnExplosion(position = position)
                 isActive = false
                 enemy.healthCounter--
             }

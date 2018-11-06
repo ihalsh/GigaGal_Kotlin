@@ -38,12 +38,9 @@ class GigaGalHud(val viewport: ExtendViewport = ExtendViewport(
                     false)
 
             // Draw a tiny GigaGal in the top right for each life left
-            for (i in 1..lives) {
-                drawBatch(it, Assets.gigaGalAssets.standingRight, Vector2(
-                        viewport.worldWidth- HUD_MARGIN * 2f * i,
-                        viewport.worldHeight - HUD_MARGIN * 2.5f
-                ))
-            }
+            for (i in 1..lives) drawBatch(it, Assets.gigaGalAssets.standingRight, Vector2(
+                            viewport.worldWidth - HUD_MARGIN * 2f * i,
+                            viewport.worldHeight - HUD_MARGIN * 2.5f))
         }
     }
 }
